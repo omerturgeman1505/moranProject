@@ -1,0 +1,25 @@
+{
+  "database": {
+    "rules": "database.rules.json"
+  },
+  "hosting": {
+    "site": "moran-cce72",
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "headers": [
+      {
+        "source": "jobs.json",
+        "headers": [
+          { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+        ]
+      }
+    ],
+    "rewrites": [
+      { "source": "**", "destination": "/index.html" }
+    ]
+  }
+}
