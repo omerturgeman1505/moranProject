@@ -44,6 +44,11 @@ EXTRA_KEYWORDS = [
     "toc analyzer", "ionex", "wintercell",
 ]
 
+EXTRA_NEGATIVE_TERMS = [
+    "freelance", "freelancer", "ai trainer", "trainer", "data annotation",
+    "annotator", "content writer",
+]
+
 HOT_PROFILE_SIGNALS = {
     "r_and_d": [
         "r&d", "research and development", "development engineer",
@@ -90,6 +95,7 @@ def apply_moran_profile(platform_module) -> None:
     _extend_unique(platform_module.LINKEDIN_KEYWORDS, EXTRA_LINKEDIN_KEYWORDS)
     _extend_unique(platform_module.TARGET_ROLES, EXTRA_TARGET_ROLES)
     _extend_unique(platform_module.KEYWORDS, EXTRA_KEYWORDS)
+    _extend_unique(platform_module.NEGATIVE_TERMS, EXTRA_NEGATIVE_TERMS)
     _extend_unique(
         platform_module.MED_ENG_FIELDS,
         ["medical engineer", "biomedical engineer", "הנדסה ביו רפואית"],
