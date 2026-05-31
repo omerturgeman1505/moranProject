@@ -2,19 +2,22 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
-from job_search_platform import load_config, publish_scan_status, run_cloud_scan, setup_logging
+import job_search_platform as platform
+from moran_profile import apply_moran_profile
 
 
 def main() -> None:
-    setup_logging()
+    platform.setup_logging()
+    apply_moran_profile(platform)
     requested_at = datetime.now(timezone.utc).isoformat()
-    publish_scan_status(True, "סריקה ידנית רצה...", requested_at=requested_at)
+    platform.publish_scan_status(True, "סריקה ידנית רצה...", requested_at=requested_at)
     try:
-        config = load_config()
-        stats = run_cloud_scan(config)
-        publish_scan_status(
+        config = platform.load_config()
+        stats = platform.run_cloud_scan(config, use_sample=False)
+        platform.publish_scan_status(
             False,
-            f"הסריקה הושלמה: {stats['published']} משרות מוצגות, {stats['new_relevant']} חדשות.",
+            f"הסריקה הושלמה: {stats['published']} משרות מוצגות, "
+            f"{stats['new_relevant']} חדשות.",
             requested_at=requested_at,
             finished_at=datetime.now(timezone.utc).isoformat(),
             count=stats["published"],
@@ -26,7 +29,7 @@ def main() -> None:
             f"{stats['scraped']} scraped, {stats['state']} in state."
         )
     except Exception as exc:  # noqa: BLE001
-        publish_scan_status(
+        platform.publish_scan_status(
             False,
             f"הסריקה נכשלה: {exc}",
             requested_at=requested_at,
