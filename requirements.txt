@@ -1,0 +1,10 @@
+beautifulsoup4==4.12.3
+Flask==3.0.3
+google-auth==2.35.0
+gspread==6.1.4
+python-dotenv==1.0.1
+requests==2.32.3
+
+# Optional: only needed for JS-rendered boards (Comeet/Workday) via
+# search_dynamic_boards(). Install with: pip install playwright && playwright install chromium
+# playwright==1.44.0
