@@ -1,0 +1,27 @@
+{
+  "rules": {
+    "jobs": {
+      ".read": true,
+      ".write": false
+    },
+    "meta": {
+      ".read": true,
+      ".write": false
+    },
+    "applied": {
+      ".read": true,
+      "$jobId": {
+        ".write": true,
+        ".validate": "newData.val() == null || (newData.hasChildren(['link', 'title', 'company', 'appliedAt']) && newData.child('link').isString() && newData.child('title').isString() && newData.child('company').isString() && newData.child('appliedAt').isString())"
+      }
+    },
+    "scan_request": {
+      ".read": true,
+      ".write": false
+    },
+    "scan_status": {
+      ".read": true,
+      ".write": false
+    }
+  }
+}
