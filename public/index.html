@@ -1,42 +1,233 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="he" dir="rtl">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>מערכת חיפוש משרות — מורן</title>
   <style>
-    :root{--bg:#f6f7f9;--panel:#fff;--ink:#1f2937;--muted:#667085;--line:#d9dee7;--accent:#2563eb;--chip:#eef2ff;--good:#0f766e}
-    *{box-sizing:border-box}body{margin:0;font-family:Arial,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink)}
-    header{background:#fff;border-bottom:1px solid var(--line);padding:20px 28px}h1{margin:0 0 6px;font-size:24px}.subtitle{color:var(--muted);margin:0;font-size:14px}
-    main{max-width:1100px;margin:0 auto;padding:22px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
-    .stats{display:grid;grid-template-columns:repeat(4,minmax(100px,1fr));gap:12px;flex:1}.stat{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px}.stat strong{display:block;font-size:22px}.stat span{color:var(--muted);font-size:12px}
-    .scanmsg{color:var(--muted);font-size:12px}.filters{display:flex;gap:8px;align-items:center;margin:14px 0;flex-wrap:wrap}.filters button{color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 14px;cursor:pointer;font-size:14px}.filters button.active{background:var(--ink);color:#fff;border-color:var(--ink)}
-    .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;margin-bottom:10px;overflow:hidden}.card.hot{border-color:#fdba74;box-shadow:0 0 0 1px #fed7aa inset}.card-head{display:flex;align-items:center;gap:10px;padding:14px 16px;cursor:pointer}.card-head:hover{background:#fafbfc}.chev{transition:transform .15s;color:var(--muted);font-size:13px}.card.open .chev{transform:rotate(90deg)}.ttl{flex:1;min-width:0}.ttl b{font-size:15px}.ttl .meta{color:var(--muted);font-size:13px;margin-top:2px}
-    .badge{border-radius:999px;display:inline-block;font-weight:700;padding:5px 9px;white-space:nowrap;font-size:12px}.alive{background:#dcfce7;color:#166534}.unknown{background:#fef9c3;color:#854d0e}.hotb{background:#ffedd5;color:#9a3412;border:1px solid #fdba74}.newb{background:#2563eb;color:#fff}.appliedb{background:#dbeafe;color:#1e40af}
-    .body{display:none;border-top:1px solid var(--line);padding:16px}.card.open .body{display:block}.req{white-space:pre-wrap;line-height:1.55;font-size:13.5px;color:#374151;max-height:340px;overflow:auto;background:#fbfcfe;border:1px solid var(--line);border-radius:8px;padding:12px}.terms{color:#3730a3;background:var(--chip);border-radius:6px;display:inline-block;padding:6px 8px;font-size:12.5px;margin:8px 0}.actions{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}.btn{border:0;border-radius:8px;padding:10px 16px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;font-size:14px}.btn-open{background:var(--accent);color:#fff}.btn-apply{background:var(--good);color:#fff}.btn-unapply{background:#e5e7eb;color:#374151}.empty{padding:40px;text-align:center;color:var(--muted)}.updated{color:var(--muted);font-size:12px;margin-top:14px}@media(max-width:760px){.stats{grid-template-columns:1fr 1fr}main{padding:14px}}
+    :root{--bg:#f6f7f9;--panel:#fff;--ink:#1f2937;--muted:#667085;--line:#d9dee7;
+      --accent:#2563eb;--chip:#eef2ff;--good:#0f766e}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink)}
+    header{background:#fff;border-bottom:1px solid var(--line);padding:20px 28px}
+    h1{margin:0 0 6px;font-size:24px}
+    .subtitle{color:var(--muted);margin:0;font-size:14px}
+    main{max-width:1100px;margin:0 auto;padding:22px}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+    .stats{display:grid;grid-template-columns:repeat(4,minmax(100px,1fr));gap:12px;flex:1}
+    .stat{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+    .stat strong{display:block;font-size:22px}
+    .stat span{color:var(--muted);font-size:12px}
+    .btn{border:0;border-radius:8px;padding:10px 16px;font-weight:700;cursor:pointer;text-decoration:none;
+      display:inline-flex;align-items:center;font-size:14px}
+    .btn-scan{background:var(--accent);color:#fff}
+    .scanmsg{color:var(--muted);font-size:12px;margin-top:6px}
+    .filters{display:flex;gap:8px;align-items:center;margin:14px 0;flex-wrap:wrap}
+    .filters button{color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:999px;
+      padding:8px 14px;cursor:pointer;font-size:14px}
+    .filters button.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;margin-bottom:10px;overflow:hidden}
+    .card.hot{border-color:#fdba74;box-shadow:0 0 0 1px #fed7aa inset}
+    .card-head{display:flex;align-items:center;gap:10px;padding:14px 16px;cursor:pointer}
+    .card-head:hover{background:#fafbfc}
+    .chev{transition:transform .15s;color:var(--muted);font-size:13px}
+    .card.open .chev{transform:rotate(90deg)}
+    .ttl{flex:1;min-width:0}
+    .ttl b{font-size:15px}
+    .ttl .meta{color:var(--muted);font-size:13px;margin-top:2px}
+    .badge{border-radius:999px;display:inline-block;font-weight:700;padding:5px 9px;white-space:nowrap;font-size:12px}
+    .alive{background:#dcfce7;color:#166534}
+    .unknown{background:#fef9c3;color:#854d0e}
+    .hotb{background:#ffedd5;color:#9a3412;border:1px solid #fdba74}
+    .newb{background:#2563eb;color:#fff}
+    .appliedb{background:#dbeafe;color:#1e40af}
+    .body{display:none;border-top:1px solid var(--line);padding:16px}
+    .card.open .body{display:block}
+    .req{white-space:pre-wrap;line-height:1.55;font-size:13.5px;color:#374151;max-height:340px;
+      overflow:auto;background:#fbfcfe;border:1px solid var(--line);border-radius:8px;padding:12px}
+    .terms{color:#3730a3;background:var(--chip);border-radius:6px;display:inline-block;padding:6px 8px;
+      font-size:12.5px;margin:8px 0}
+    .actions{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+    .btn-open{background:var(--accent);color:#fff}
+    .btn-apply{background:var(--good);color:#fff}
+    .btn-unapply{background:#e5e7eb;color:#374151}
+    .applied-on{color:var(--muted);font-size:12px;align-self:center}
+    .empty{padding:40px;text-align:center;color:var(--muted)}
+    .updated{color:var(--muted);font-size:12px;margin-top:14px}
+    @media(max-width:760px){.stats{grid-template-columns:1fr 1fr}main{padding:14px}}
   </style>
 </head>
 <body>
-  <header><h1>מערכת חיפוש משרות — מורן 🔬</h1><p class="subtitle">משרות פעילות בישראל. הסריקה מתבצעת ידנית דרך GitHub Actions.</p></header>
+  <header>
+    <h1>מערכת חיפוש משרות — מורן 🔬</h1>
+    <p class="subtitle">R&amp;D · Medical · Mechanical · Lab Technician · Process · NPI — משרות פעילות בישראל מהחודש האחרון. לחצי על משרה לפתיחת הדרישות המלאות.</p>
+  </header>
+
   <main>
-    <div class="topbar"><div class="stats"><div class="stat"><strong id="s-total">0</strong><span>משרות מתאימות</span></div><div class="stat"><strong id="s-new">0</strong><span>חדשות</span></div><div class="stat"><strong id="s-hot">🔥 0</strong><span>לוהטות</span></div><div class="stat"><strong id="s-applied">0</strong><span>הגשתי</span></div></div><div class="scanmsg"><a href="https://github.com/omerturgeman1505/moranProject/actions/workflows/manual-scan.yml" target="_blank" rel="noreferrer">עדכון משרות ידני ב-GitHub</a></div></div>
-    <div class="filters"><button data-f="fit" class="active">מתאימות למורן</button><button data-f="review">פחות מתאימות, שוות בדיקה</button><button data-f="new">🆕 חדשות</button><button data-f="hot">🔥 לוהטות</button><button data-f="all">הכל</button><button data-f="alive">פעילות</button><button data-f="applied">✓ הגשתי</button></div>
-    <div id="list"><div class="empty">טוען משרות…</div></div><p class="updated" id="updated"></p>
+    <div class="topbar">
+      <div class="stats">
+        <div class="stat"><strong id="s-total">0</strong><span>משרות מתאימות</span></div>
+        <div class="stat"><strong id="s-new">0</strong><span>חדשות</span></div>
+        <div class="stat"><strong id="s-hot">🔥 0</strong><span>לוהטות</span></div>
+        <div class="stat"><strong id="s-applied">0</strong><span>הגשתי</span></div>
+      </div>
+    </div>
+
+    <div class="filters">
+      <button data-f="fit" class="active">מתאימות למורן</button>
+      <button data-f="review">פחות מתאימות, שוות בדיקה</button>
+      <button data-f="new">🆕 חדשות</button>
+      <button data-f="hot">🔥 לוהטות</button>
+      <button data-f="all">הכל</button>
+      <button data-f="alive">פעילות</button>
+      <button data-f="applied">✓ הגשתי</button>
+    </div>
+
+    <div id="list"><div class="empty">טוען משרות…</div></div>
+    <p class="updated" id="updated"></p>
   </main>
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-    import { getDatabase, ref, get, set, remove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-    const firebaseConfig={apiKey:"AIzaSyBSg1UOm38SoHUeJFFutIpkTz-Ieeddiq0",authDomain:"moran-cce72.firebaseapp.com",databaseURL:"https://moran-cce72-default-rtdb.europe-west1.firebasedatabase.app",projectId:"moran-cce72",storageBucket:"moran-cce72.firebasestorage.app",messagingSenderId:"745378545086",appId:"1:745378545086:web:fc33c046d215911d140def",measurementId:"G-ZX02NHPLCN"};
-    const app=initializeApp(firebaseConfig);try{getAnalytics(app)}catch(e){}const db=getDatabase(app);let allJobs=[],applied={},filter="fit";const esc=s=>(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));function jobId(link){let h=5381;for(let i=0;i<link.length;i++)h=((h*33)^link.charCodeAt(i))>>>0;return"j"+h.toString(16)}const fmtDate=iso=>{try{return new Date(iso).toLocaleDateString("he-IL")}catch(e){return iso}};
-    async function loadJobs(){try{const snap=await get(ref(db,"jobs"));if(snap.exists()){const v=snap.val();return Array.isArray(v)?v.filter(Boolean):Object.values(v)}}catch(e){console.warn("RTDB jobs read failed",e)}const r=await fetch("jobs.json?ts="+Date.now());return(await r.json()).jobs||[]}
-    async function loadApplied(){applied={};try{const snap=await get(ref(db,"applied"));if(snap.exists())Object.values(snap.val()).forEach(x=>{if(x&&x.link)applied[x.link]=x.appliedAt})}catch(e){console.warn("RTDB applied read failed",e)}}
-    async function apply(job){const at=new Date().toISOString();applied[job.link]=at;render();try{await set(ref(db,"applied/"+jobId(job.link)),{link:job.link,title:job.title,company:job.company,appliedAt:at})}catch(e){alert("שמירת ההגשה נכשלה");console.error(e)}}
-    async function unapply(link){delete applied[link];render();try{await remove(ref(db,"applied/"+jobId(link)))}catch(e){console.error(e)}}
-    function visibleJobs(){if(filter==="applied")return allJobs.filter(j=>applied[j.link]);let jobs=allJobs.filter(j=>!applied[j.link]);if(filter==="fit")jobs=jobs.filter(j=>(j.fit_category||"fit")==="fit");else if(filter==="review")jobs=jobs.filter(j=>j.fit_category==="review");else if(filter==="new")jobs=jobs.filter(j=>j.is_new);else if(filter==="hot")jobs=jobs.filter(j=>j.is_hot);else if(filter==="alive")jobs=jobs.filter(j=>j.alive_status==="alive");return jobs}
-    function render(){const list=document.getElementById("list"),jobs=visibleJobs(),active=allJobs.filter(j=>!applied[j.link]);document.getElementById("s-total").textContent=active.length;document.getElementById("s-new").textContent=active.filter(j=>j.is_new).length;document.getElementById("s-hot").textContent="🔥 "+active.filter(j=>j.is_hot).length;document.getElementById("s-applied").textContent=Object.keys(applied).length;if(!jobs.length){list.innerHTML='<div class="empty">אין משרות להצגה בכרטיסייה הזו.</div>';return}list.innerHTML=jobs.map((j,i)=>{const isApplied=!!applied[j.link],newB=j.is_new?'<span class="badge newb">חדש</span>':"",hotB=j.is_hot?`<span class="badge hotb" title="${esc(j.hot_terms)}">🔥 לוהטת</span>`:"",liveB=j.alive_status==="alive"?'<span class="badge alive">פעילה</span>':'<span class="badge unknown">לא ודאי</span>',appB=isApplied?`<span class="badge appliedb">✓ הוגש ${fmtDate(applied[j.link])}</span>`:"",req=j.requirements?`<div class="req">${esc(j.requirements)}</div>`:'<div class="req">פתחי את עמוד המשרה לצפייה בדרישות המלאות.</div>',terms=j.matched_terms?`<div class="terms">התאמות: ${esc(j.matched_terms)}</div>`:"",reason=j.fit_reason?`<div class="terms"><b>למה זה מתאים:</b> ${esc(j.fit_reason)}</div>`:"",applyBtn=isApplied?`<button class="btn btn-unapply" data-unapply="${esc(j.link)}">בטל הגשה</button>`:`<button class="btn btn-apply" data-apply="${i}">הגשתי ✓</button>`;return`<div class="card ${j.is_hot?'hot':''}"><div class="card-head" data-toggle><span class="chev">▶</span><div class="ttl"><b>${esc(j.title)}</b><div class="meta">${esc(j.company)} · ${esc(j.location)} · ${esc(j.source)}</div></div>${newB} ${hotB} ${appB} ${liveB}</div><div class="body">${reason}${terms}${req}<div class="actions"><a class="btn btn-open" href="${esc(j.link)}" target="_blank" rel="noreferrer">פתיחת עמוד המשרה ↗</a>${applyBtn}</div></div></div>`}).join("");list.querySelectorAll("[data-toggle]").forEach(el=>el.addEventListener("click",()=>el.closest(".card").classList.toggle("open")));list.querySelectorAll("[data-apply]").forEach(el=>el.addEventListener("click",e=>{e.stopPropagation();apply(jobs[+el.dataset.apply])}));list.querySelectorAll("[data-unapply]").forEach(el=>el.addEventListener("click",e=>{e.stopPropagation();unapply(el.dataset.unapply)}))}
-    document.querySelectorAll(".filters button").forEach(b=>b.classList.toggle("active",b.dataset.f===filter));document.querySelectorAll(".filters button").forEach(btn=>btn.addEventListener("click",()=>{document.querySelectorAll(".filters button").forEach(b=>b.classList.remove("active"));btn.classList.add("active");filter=btn.dataset.f;render()}));
-    async function loadAll(){const[jobs]=await Promise.all([loadJobs(),loadApplied()]);allJobs=jobs||[];try{const meta=await get(ref(db,"meta"));if(meta.exists()&&meta.val().generated_at)document.getElementById("updated").textContent="עודכן לאחרונה: "+new Date(meta.val().generated_at).toLocaleString("he-IL")}catch(e){}render()}loadAll().catch(err=>{document.getElementById("list").innerHTML='<div class="empty">שגיאה בטעינת הנתונים</div>';console.error(err)});
+    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getDatabase, ref, get, set, remove }
+      from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBSg1UOm38SoHUeJFFutIpkTz-Ieeddiq0",
+      authDomain: "moran-cce72.firebaseapp.com",
+      databaseURL: "https://moran-cce72-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "moran-cce72",
+      storageBucket: "moran-cce72.firebasestorage.app",
+      messagingSenderId: "745378545086",
+      appId: "1:745378545086:web:fc33c046d215911d140def",
+      measurementId: "G-ZX02NHPLCN"
+    };
+    const app = initializeApp(firebaseConfig);
+    try { getAnalytics(app); } catch (e) {}
+    const auth = getAuth(app);
+    signInAnonymously(auth).catch(e => console.warn("Anonymous auth failed", e));
+    const db = getDatabase(app);
+
+    let allJobs = [], applied = {}, filter = "fit";
+    const esc = s => (s||"").replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
+    function jobId(link){ let h=5381; for(let i=0;i<link.length;i++) h=((h*33)^link.charCodeAt(i))>>>0; return "j"+h.toString(16); }
+    const fmtDate = iso => { try { return new Date(iso).toLocaleDateString("he-IL"); } catch(e){ return iso; } };
+
+    async function loadJobs(){
+      // Prefer live Realtime Database; fall back to the static jobs.json.
+      try {
+        const snap = await get(ref(db, "jobs"));
+        if (snap.exists()) {
+          const v = snap.val();
+          return Array.isArray(v) ? v.filter(Boolean) : Object.values(v);
+        }
+      } catch(e){ console.warn("RTDB jobs read failed, using jobs.json", e); }
+      const r = await fetch("jobs.json?ts=" + Date.now());
+      return (await r.json()).jobs || [];
+    }
+    async function loadApplied(){
+      applied = {};
+      try {
+        const snap = await get(ref(db, "applied"));
+        if (snap.exists()) Object.values(snap.val()).forEach(x => { if (x && x.link) applied[x.link] = x.appliedAt; });
+      } catch(e){ console.warn("RTDB applied read failed", e); }
+    }
+    async function apply(job){
+      const at = new Date().toISOString();
+      applied[job.link] = at; render();
+      try { await set(ref(db, "applied/" + jobId(job.link)),
+        { link: job.link, title: job.title, company: job.company, appliedAt: at }); }
+      catch(e){ alert("שמירת ההגשה נכשלה. ודאי ש-Realtime Database מופעל ושהכללים נפרסו."); console.error(e); }
+    }
+    async function unapply(link){
+      delete applied[link]; render();
+      try { await remove(ref(db, "applied/" + jobId(link))); } catch(e){ console.error(e); }
+    }
+
+    function visibleJobs(){
+      if (filter === "applied") return allJobs.filter(j => applied[j.link]);
+      let jobs = allJobs.filter(j => !applied[j.link]);
+      if (filter === "fit")   jobs = jobs.filter(j => (j.fit_category || "fit") === "fit");
+      else if (filter === "review") jobs = jobs.filter(j => j.fit_category === "review");
+      else if (filter === "new")   jobs = jobs.filter(j => j.is_new);
+      else if (filter === "hot")   jobs = jobs.filter(j => j.is_hot);
+      else if (filter === "alive") jobs = jobs.filter(j => j.alive_status === "alive");
+      return jobs;
+    }
+
+    function render(){
+      const list = document.getElementById("list");
+      const jobs = visibleJobs();
+      const active = allJobs.filter(j => !applied[j.link]);
+      document.getElementById("s-total").textContent = active.length;
+      document.getElementById("s-new").textContent = active.filter(j => j.is_new).length;
+      document.getElementById("s-hot").textContent = "🔥 " + active.filter(j => j.is_hot).length;
+      document.getElementById("s-applied").textContent = Object.keys(applied).length;
+
+      if (!jobs.length){ list.innerHTML = '<div class="empty">אין משרות להצגה בכרטיסייה הזו.</div>'; return; }
+      list.innerHTML = jobs.map((j, i) => {
+        const isApplied = !!applied[j.link];
+        const newB  = j.is_new ? '<span class="badge newb">חדש</span>' : "";
+        const hotB  = j.is_hot ? `<span class="badge hotb" title="${esc(j.hot_terms)}">🔥 לוהטת</span>` : "";
+        const liveB = j.alive_status === "alive" ? '<span class="badge alive">פעילה</span>' : '<span class="badge unknown">לא ודאי</span>';
+        const appB  = isApplied ? `<span class="badge appliedb">✓ הוגש ${fmtDate(applied[j.link])}</span>` : "";
+        const req   = j.requirements ? `<div class="req">${esc(j.requirements)}</div>`
+                                     : '<div class="req">פתחי את עמוד המשרה לצפייה בדרישות המלאות.</div>';
+        const terms = j.matched_terms ? `<div class="terms">התאמות: ${esc(j.matched_terms)}</div>` : "";
+        const reason = j.fit_reason ? `<div class="terms"><b>למה זה מתאים:</b> ${esc(j.fit_reason)}</div>` : "";
+        const applyBtn = isApplied
+          ? `<button class="btn btn-unapply" data-unapply="${esc(j.link)}">בטל הגשה</button>`
+          : `<button class="btn btn-apply" data-apply="${i}">הגשתי ✓</button>`;
+        return `<div class="card ${j.is_hot?'hot':''}">
+          <div class="card-head" data-toggle>
+            <span class="chev">▶</span>
+            <div class="ttl"><b>${esc(j.title)}</b><div class="meta">${esc(j.company)} · ${esc(j.location)} · ${esc(j.source)}</div></div>
+            ${newB} ${hotB} ${appB} ${liveB}
+          </div>
+          <div class="body">
+            ${reason}${terms}${req}
+            <div class="actions">
+              <a class="btn btn-open" href="${esc(j.link)}" target="_blank" rel="noreferrer">פתיחת עמוד המשרה ↗</a>
+              ${applyBtn}
+            </div>
+          </div>
+        </div>`;
+      }).join("");
+      list.querySelectorAll("[data-toggle]").forEach(el =>
+        el.addEventListener("click", () => el.closest(".card").classList.toggle("open")));
+      list.querySelectorAll("[data-apply]").forEach(el =>
+        el.addEventListener("click", e => { e.stopPropagation(); apply(jobs[+el.dataset.apply]); }));
+      list.querySelectorAll("[data-unapply]").forEach(el =>
+        el.addEventListener("click", e => { e.stopPropagation(); unapply(el.dataset.unapply); }));
+    }
+
+    document.querySelectorAll(".filters button").forEach(b => b.classList.toggle("active", b.dataset.f === filter));
+    document.querySelectorAll(".filters button").forEach(btn =>
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".filters button").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active"); filter = btn.dataset.f; render();
+      }));
+
+    async function loadAll(){
+      const [jobs] = await Promise.all([loadJobs(), loadApplied()]);
+      allJobs = jobs || [];
+      try {
+        const meta = await get(ref(db, "meta"));
+        if (meta.exists() && meta.val().generated_at)
+          document.getElementById("updated").textContent =
+            "עודכן לאחרונה: " + new Date(meta.val().generated_at).toLocaleString("he-IL");
+      } catch(e){}
+      render();
+    }
+    loadAll().catch(err => {
+      document.getElementById("list").innerHTML = '<div class="empty">שגיאה בטעינת הנתונים</div>';
+      console.error(err);
+    });
   </script>
 </body>
 </html>
+
+
+
