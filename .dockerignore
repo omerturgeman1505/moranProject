@@ -1,0 +1,9 @@
+.env
+.firebase/
+__pycache__/
+*.pyc
+*.sqlite3
+*.log
+jobs_seen.json
+service-account.json
+public/jobs.json

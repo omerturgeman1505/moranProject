@@ -15,6 +15,13 @@
         ".validate": "newData.val() == null || (newData.hasChildren(['link', 'title', 'company', 'appliedAt']) && newData.child('link').isString() && newData.child('title').isString() && newData.child('company').isString() && newData.child('appliedAt').isString())"
       }
     },
+    "clicked": {
+      ".read": true,
+      "$jobId": {
+        ".write": true,
+        ".validate": "newData.val() == null || (newData.hasChildren(['link', 'title', 'company', 'clickedAt']) && newData.child('link').isString() && newData.child('title').isString() && newData.child('company').isString() && newData.child('clickedAt').isString())"
+      }
+    },
     "scan_request": {
       ".read": true,
       ".write": false

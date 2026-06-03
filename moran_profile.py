@@ -41,18 +41,25 @@ EXTRA_KEYWORDS = [
     "biomedical engineering", "physiologic", "physiological",
     "process optimization", "sop", "work instructions", "sterile",
     "laboratory", "lab equipment", "data analysis", "masterflex",
-    "toc analyzer", "ionex", "wintercell",
+    "toc analyzer", "ionex", "wintercell", "dot systems", "dot system",
+    "twin", "water saving", "large scale cell culture", "calibration",
+    "calibrated", "iud", "inserter", "removal device", "afeka",
 ]
 
 EXTRA_NEGATIVE_TERMS = [
     "freelance", "freelancer", "ai trainer", "trainer", "data annotation",
-    "annotator", "content writer",
+    "annotator", "content writer", "simulator", "simulation", "simulations",
+    "gaming", "game engine", "unity", "unreal", "vr", "machine learning",
+    "big data", "cloud", "wireless", "silicon", "soc", "mac layer",
+    "bluetooth", "ble", "firmware", "signal processing", "software engineering",
+    "algorithm development", "סימולטור", "סימולטורים", "סימולציה",
+    "סימולציות", "מנועים גרפיים", "למידת מכונה", "מציאות מדומה",
 ]
 
 HOT_PROFILE_SIGNALS = {
     "r_and_d": [
         "r&d", "research and development", "development engineer",
-        "engineer", "engineering", "פיתוח", "מהנדס", "מהנדסת",
+        "פיתוח",
     ],
     "junior_level": [
         "junior", "entry level", "graduate", "0-2", "0-3", "1-2", "1-3",
@@ -64,20 +71,23 @@ HOT_PROFILE_SIGNALS = {
     ],
     "mechanical_design": [
         "solidworks", "cad", "mechanical design", "3d printing",
-        "prototype", "prototyping", "mechanical", "מכונות",
+        "prototype", "prototyping", "mechanical", "iud", "inserter",
+        "removal device", "מכונות",
     ],
     "lab_bioprocess": [
         "bioreactor", "bioreactors", "cell culture", "tissue culture",
         "bioprocess", "cultivated", "sterile", "laboratory", "lab technician",
         "flexcell", "trubio", "cellaca", "cedex", "mfcs", "masterflex",
+        "dot system", "dot systems", "twin", "large scale cell culture",
+        "calibration", "calibrated",
     ],
     "process_data": [
         "process optimization", "process engineer", "validation", "sop",
-        "work instructions", "data analysis", "excel", "matlab", "python",
+        "work instructions", "data analysis",
     ],
     "systems_integration": [
-        "integration", "system integration", "machine systems", "custom machine",
-        "troubleshooting", "maintenance", "equipment", "reliability", "repeatability",
+        "system integration", "machine systems", "custom machine",
+        "troubleshooting", "maintenance", "lab equipment", "reliability", "repeatability",
     ],
 }
 
