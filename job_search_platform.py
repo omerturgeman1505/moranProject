@@ -719,8 +719,12 @@ def _has_job_level_negative(job: Job | StoredJob) -> bool:
     ]
     for phrase in recruiter_noise:
         body_text = body_text.replace(phrase, "")
+    recent_grad = "recently graduated" in body_text or "graduate" in body_text
+    biomedical = any(term in body_text for term in ["biomedical", "medical device", "medical engineering"])
     for neg in NEGATIVE_TERMS:
         if neg in LEVEL_NEGATIVE_TERMS:
+            continue
+        if neg == "student" and recent_grad and biomedical:
             continue
         if neg.isascii():
             if re.search(rf"\b{re.escape(neg.strip())}\b", body_text):
@@ -842,11 +846,35 @@ def _has_biomedical_review_signal(text: str) -> bool:
     return any(term in low for term in review_terms)
 
 
+def _clean_job_requirement_text(text: str) -> str:
+    """Remove LinkedIn recruiter/profile preamble that is not job requirements."""
+    noise_markers = [
+        "direct message the job poster",
+        "הודעה ישירה פוסטר עבודה",
+        "talent acquisition",
+        "recruitment",
+        "career growth consultant",
+        "vp hr",
+        "vp r&d",
+        "co-founder",
+        "years in medtech innovation",
+        "people first",
+    ]
+    kept: list[str] = []
+    for line in (text or "").splitlines():
+        low = line.lower()
+        if any(marker in low for marker in noise_markers):
+            continue
+        kept.append(line)
+    return "\n".join(kept)
+
+
 def analyze_moran_fit(job: StoredJob) -> tuple[str, str]:
     """Classify a stored posting for Moran and explain the decision."""
+    clean_requirements = _clean_job_requirement_text(job.requirements)
     text = " ".join([
         job.title, job.company, job.location, job.source, job.description,
-        job.matched_terms, job.hot_terms, job.requirements,
+        job.matched_terms, job.hot_terms, clean_requirements,
     ]).lower()
     if _has_job_level_negative(job):
         return "skip", "המשרה נראית בכירה/סטודנטיאלית מדי ולכן לא מוצגת כהתאמה."
@@ -900,7 +928,7 @@ def analyze_moran_fit(job: StoredJob) -> tuple[str, str]:
     # Veto from the requirement-fit module: master degree (hard skip), degree
     # mismatch, or years required well above Moran's 2-year baseline.
     from requirement_fit import evaluate_fit
-    veto = evaluate_fit(job.requirements or job.description or "")
+    veto = evaluate_fit(clean_requirements or job.description or "")
     if veto.requires_master:
         return "skip", veto.reason
     if veto.fit_category == "no_fit":
@@ -1368,6 +1396,7 @@ DEAD_MARKERS = [
     "the job you are looking for", "job not found", "this position is closed",
     "applications are no longer", "we are no longer accepting",
     "המשרה אינה", "המשרה הוסרה", "משרה לא נמצאה", "המשרה נסגרה",
+    "כבר לא מקבלים בקשות", "לא מקבלים בקשות",
 ]
 
 ALIVE = "alive"
