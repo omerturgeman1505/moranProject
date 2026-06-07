@@ -135,12 +135,15 @@ def apply_moran_profile(platform_module) -> None:
         return False, []
 
     def analyze_moran_fit(job) -> tuple[str, str]:
+        from requirement_fit import evaluate_fit
+
+        if platform_module._has_job_level_negative(job):
+            return "skip", "המשרה נראית בכירה/סטודנטיאלית מדי ולכן לא מוצגת כהתאמה."
+
         text = " ".join([
             job.title, job.company, job.location, job.source, job.description,
             job.matched_terms, job.hot_terms, job.requirements,
         ]).lower()
-        if platform_module._has_negative_term(text):
-            return "skip", "המשרה נראית בכירה/סטודנטיאלית מדי ולכן לא מוצגת כהתאמה."
 
         signals: list[str] = []
         score = 0
@@ -176,10 +179,26 @@ def apply_moran_profile(platform_module) -> None:
             score += 1
 
         if score >= 4:
-            return "fit", "מתאימה למורן כי " + "; ".join(signals[:4]) + "."
-        if score >= 2 or job.is_relevant:
-            return "review", "פחות חזקה, אבל שווה בדיקה כי " + "; ".join(signals[:3]) + "."
-        return "skip", "לא נמצאו מספיק סימנים שמחברים את המשרה לפרופיל של מורן."
+            category, reason = "fit", "מתאימה למורן כי " + "; ".join(signals[:4]) + "."
+        elif score >= 2 or job.is_relevant:
+            category, reason = "review", "פחות חזקה, אבל שווה בדיקה כי " + "; ".join(signals[:3]) + "."
+        elif platform_module._has_biomedical_review_signal(text):
+            category, reason = (
+                "review",
+                "פחות מתאימה, אבל שווה בדיקה כי היא בתחום biomedical/medical device ויש בה נקודת חיבור מקצועית לפרופיל של מורן."
+            )
+        else:
+            return "skip", "לא נמצאו מספיק סימנים שמחברים את המשרה לפרופיל של מורן."
+
+        clean_req = platform_module._clean_job_requirement_text(job.requirements)
+        veto = evaluate_fit(clean_req or job.requirements or job.description or "")
+        if veto.requires_master:
+            return "skip", veto.reason
+        if veto.fit_category == "no_fit":
+            return "skip", veto.reason
+        if veto.fit_category == "review" and category == "fit":
+            return "review", f"{veto.reason}. " + reason
+        return category, reason
 
     platform_module.evaluate_hotness = evaluate_hotness
     platform_module.analyze_moran_fit = analyze_moran_fit

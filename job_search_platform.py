@@ -91,8 +91,6 @@ LINKEDIN_KEYWORDS = [
 # Israeli companies with public Greenhouse boards, fetched via the structured
 # JSON API (boards-api.greenhouse.io). A mix of medtech / biotech / hardware.
 GREENHOUSE_COMPANIES = [
-    "similarweb", "taboola", "monday", "wix", "fiverr", "riskified",
-    "ironsource", "appsflyer", "lemonade", "redislabs", "jfrog",
     "medtronic", "insightec", "nanox", "evogene", "pluri",
 ]
 
@@ -185,12 +183,20 @@ NEGATIVE_TERMS = [
     "למידת מכונה", "מציאות מדומה",
     "מנהל", "מנהלת", "סטודנט", "סטודנטית", "מתמחה",
     "בכיר", "בכירה", "מנוסה",
+    # Title-level only (also added to LEVEL_NEGATIVE_TERMS)
+    "sr",
+    "תוכנה",
+    # Body-level: hardware / embedded / unrelated domains
+    "fpga", "hardware engineer", "hardware engineering",
+    "מהנדס תוכנה", "מהנדסת תוכנה",
 ]
 LEVEL_NEGATIVE_TERMS = {
     "senior", "lead", "manager", "director", "head of", "vp ",
     "principal", "staff engineer", "team lead",
     "מנהל", "מנהלת", "סטודנט", "סטודנטית", "מתמחה",
     "בכיר", "בכירה", "מנוסה",
+    "sr",
+    "תוכנה",
 }
 
 
@@ -930,7 +936,7 @@ def analyze_moran_fit(job: StoredJob) -> tuple[str, str]:
     # Veto from the requirement-fit module: master degree (hard skip), degree
     # mismatch, or years required well above Moran's 2-year baseline.
     from requirement_fit import evaluate_fit
-    veto = evaluate_fit(clean_requirements or job.description or "")
+    veto = evaluate_fit(clean_requirements or job.requirements or job.description or "")
     if veto.requires_master:
         return "skip", veto.reason
     if veto.fit_category == "no_fit":
