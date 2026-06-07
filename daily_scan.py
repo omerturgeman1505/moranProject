@@ -28,6 +28,23 @@ def main() -> None:
             f"{stats['published']} published, {stats['new_relevant']} new, "
             f"{stats['scraped']} scraped, {stats['state']} in state."
         )
+        jobs_data = platform.rtdb_get("jobs")
+        if isinstance(jobs_data, list):
+            jobs_list = jobs_data
+        elif isinstance(jobs_data, dict):
+            jobs_list = list(jobs_data.values())
+        else:
+            jobs_list = []
+        if jobs_list:
+            print(f"\n=== רשימת {len(jobs_list)} משרות מתאימות ===")
+            for i, job in enumerate(sorted(jobs_list, key=lambda j: j.get("title", "") if isinstance(j, dict) else ""), 1):
+                if not isinstance(job, dict):
+                    continue
+                title = job.get("title", "ללא כותרת")
+                company = job.get("company", "ללא חברה")
+                location = job.get("location", "")
+                hot = "[חם] " if job.get("is_hot") else ""
+                print(f"{i:3}. {hot}{title} | {company} | {location}")
     except Exception as exc:  # noqa: BLE001
         platform.publish_scan_status(
             False,
