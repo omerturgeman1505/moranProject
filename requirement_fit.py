@@ -143,8 +143,12 @@ _YEARS_PATTERNS = [
     re.compile(r"(\d{1,2})\s*\+\s*שנ"),
     re.compile(r"(\d{1,2})\s*[-–—]\s*(\d{1,2})\s+שנ"),
     re.compile(r"(\d{1,2})\s+שנות\s+ניסיון"),
+    re.compile(r"(\d{1,2})\s+שנ(?:ות|ים|ה)\s+(?:\w+\s+)?ניסיון"),
     re.compile(r"ניסיון\s+של\s+(\d{1,2})\s+שנ"),
+    re.compile(r"ניסיון\s+(?:\w+\s+){0,2}של\s+(\d{1,2})\s+שנ"),
     re.compile(r"(\d{1,2})\s+שנ(?:ות|ים)?\s+ומעלה"),
+    # English: "5 years of relevant experience", "5 years related experience"
+    re.compile(r"\b(\d{1,2})\s+years?\s+(?:of\s+)?(?:\w+\s+){0,2}experience\b", re.IGNORECASE),
 ]
 
 _HEBREW_NUMBER_WORDS = {
