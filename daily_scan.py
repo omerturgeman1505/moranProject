@@ -45,8 +45,18 @@ def main() -> None:
                     location = job.get("location", "")
                     hot = "[חם] " if job.get("is_hot") else ""
                     link = job.get("link", "")
-                    print(f"{i:3}. {hot}{title} | {company} | {location}")
-                    print(f"       {link}")
+                    fit_reason = job.get("fit_reason", "")
+                    matched = job.get("matched_terms", "")
+                    requirements = job.get("requirements", "") or job.get("description", "")
+                    print(f"\n{i:3}. {hot}{title} | {company} | {location}")
+                    print(f"       קישור: {link}")
+                    if fit_reason:
+                        print(f"       התאמה: {fit_reason}")
+                    if matched:
+                        print(f"       מילות מפתח: {matched}")
+                    if requirements:
+                        snippet = requirements[:500].replace("\n", " ").strip()
+                        print(f"       דרישות: {snippet}{'...' if len(requirements) > 500 else ''}")
             print(f"\n=== רשימת {len(jobs_list)} משרות מתאימות ===")
             for i, job in enumerate(jobs_list, 1):
                 if not isinstance(job, dict):
