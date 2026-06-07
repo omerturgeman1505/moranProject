@@ -36,15 +36,27 @@ def main() -> None:
         else:
             jobs_list = []
         if jobs_list:
+            new_jobs = [j for j in jobs_list if isinstance(j, dict) and j.get("is_new")]
+            if new_jobs:
+                print(f"\n=== {len(new_jobs)} משרות חדשות מהסריקה הזו ===")
+                for i, job in enumerate(new_jobs, 1):
+                    title = job.get("title", "ללא כותרת")
+                    company = job.get("company", "ללא חברה")
+                    location = job.get("location", "")
+                    hot = "[חם] " if job.get("is_hot") else ""
+                    link = job.get("link", "")
+                    print(f"{i:3}. {hot}{title} | {company} | {location}")
+                    print(f"       {link}")
             print(f"\n=== רשימת {len(jobs_list)} משרות מתאימות ===")
-            for i, job in enumerate(sorted(jobs_list, key=lambda j: j.get("title", "") if isinstance(j, dict) else ""), 1):
+            for i, job in enumerate(jobs_list, 1):
                 if not isinstance(job, dict):
                     continue
                 title = job.get("title", "ללא כותרת")
                 company = job.get("company", "ללא חברה")
                 location = job.get("location", "")
                 hot = "[חם] " if job.get("is_hot") else ""
-                print(f"{i:3}. {hot}{title} | {company} | {location}")
+                new = "[חדש] " if job.get("is_new") else ""
+                print(f"{i:3}. {new}{hot}{title} | {company} | {location}")
     except Exception as exc:  # noqa: BLE001
         platform.publish_scan_status(
             False,
