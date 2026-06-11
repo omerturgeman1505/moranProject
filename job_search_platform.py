@@ -186,6 +186,11 @@ NEGATIVE_TERMS = [
     # Title-level only (also added to LEVEL_NEGATIVE_TERMS)
     "sr",
     "תוכנה",
+    "software",
+    "sysops",
+    "data center",
+    "chip",
+    "pcb",
     # Body-level: hardware / embedded / unrelated domains
     "fpga", "hardware engineer", "hardware engineering",
     "מהנדס תוכנה", "מהנדסת תוכנה",
@@ -197,6 +202,11 @@ LEVEL_NEGATIVE_TERMS = {
     "בכיר", "בכירה", "מנוסה",
     "sr",
     "תוכנה",
+    "software",
+    "sysops",
+    "data center",
+    "chip",
+    "pcb",
 }
 
 
