@@ -7,11 +7,11 @@
   <style>
     /* ── Dark glass design tokens ───────────────────────────────────────────── */
     :root {
-      --glass:      rgba(255,255,255,0.055);
-      --glass-h:    rgba(255,255,255,0.085);
-      --glass-a:    rgba(255,255,255,0.10);
-      --glass-bdr:  rgba(255,255,255,0.11);
-      --glass-lt:   rgba(255,255,255,0.055);
+      --glass:      rgba(255,255,255,0.08);
+      --glass-h:    rgba(255,255,255,0.12);
+      --glass-a:    rgba(255,255,255,0.15);
+      --glass-bdr:  rgba(255,255,255,0.13);
+      --glass-lt:   rgba(255,255,255,0.07);
       --blur:        blur(16px) saturate(160%);
       --ink:        #dde6f5;
       --ink2:       #a8b8d0;
@@ -44,8 +44,8 @@
       --radius:     14px;
       --radius-sm:  9px;
       --radius-pill: 999px;
-      --shadow:     0 4px 24px rgba(0,0,0,.45), 0 1px 4px rgba(0,0,0,.3);
-      --shadow-md:  0 8px 36px rgba(0,0,0,.55), 0 2px 10px rgba(0,0,0,.3);
+      --shadow:     0 4px 30px rgba(0,0,0,.65), 0 1px 6px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,0.07);
+      --shadow-md:  0 8px 44px rgba(0,0,0,.75), 0 2px 12px rgba(0,0,0,.5),  inset 0 1px 0 rgba(255,255,255,0.07);
       --trans:      .17s ease;
     }
 
@@ -60,10 +60,10 @@
       line-height: 1.55;
       min-height: 100vh;
       background:
-        radial-gradient(ellipse at 15% 25%, rgba(37,99,235,0.13) 0%, transparent 55%),
-        radial-gradient(ellipse at 85% 75%, rgba(124,58,237,0.09) 0%, transparent 55%),
-        radial-gradient(ellipse at 50% 50%, rgba(15,30,60,0.6) 0%, transparent 80%),
-        linear-gradient(155deg, #06101e 0%, #0c1829 55%, #080f1c 100%);
+        radial-gradient(ellipse at 15% 25%, rgba(37,99,235,0.10) 0%, transparent 52%),
+        radial-gradient(ellipse at 85% 75%, rgba(124,58,237,0.07) 0%, transparent 52%),
+        radial-gradient(ellipse at 50% 50%, rgba(6,14,32,0.7) 0%, transparent 80%),
+        linear-gradient(155deg, #010609 0%, #040c18 55%, #020609 100%);
       background-attachment: fixed;
     }
     a { color: inherit; }
@@ -71,7 +71,7 @@
 
     /* ── Header ─────────────────────────────────────────────────────────────── */
     .site-header {
-      background: rgba(6,16,30,0.72);
+      background: rgba(2,6,12,0.82);
       backdrop-filter: var(--blur);
       -webkit-backdrop-filter: var(--blur);
       border-bottom: 1px solid var(--glass-bdr);
@@ -232,7 +232,7 @@
       transition: box-shadow var(--trans), border-color var(--trans);
     }
     .cluster:hover { box-shadow: var(--shadow-md); }
-    .cluster.has-hot { border-color: var(--hot-bd); box-shadow: 0 4px 24px rgba(251,146,60,.15); }
+    .cluster.has-hot { box-shadow: 0 4px 32px rgba(0,0,0,.7), 0 1px 6px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,0.07); }
 
     .cluster-head {
       display: flex; align-items: center; gap: 12px;
@@ -262,7 +262,10 @@
 
     /* ── Cluster jobs container ─────────────────────────────────────────────── */
     .cluster-jobs { display: none; }
-    .cluster.open .cluster-jobs { display: block; }
+    .cluster.open .cluster-jobs {
+      display: block;
+      animation: slideUp .18s cubic-bezier(.22,.68,0,1) both;
+    }
 
     /* ── Job rows ───────────────────────────────────────────────────────────── */
     .job-row { border-top: 1px solid var(--glass-lt); overflow: hidden; }
