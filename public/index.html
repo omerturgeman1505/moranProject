@@ -1,353 +1,927 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="he" dir="rtl">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>מערכת חיפוש משרות — מורן</title>
+  <title>חיפוש משרות — מורן</title>
   <style>
-    :root{--bg:#f6f7f9;--panel:#fff;--ink:#1f2937;--muted:#667085;--line:#d9dee7;
-      --accent:#2563eb;--chip:#eef2ff;--good:#0f766e;--ai:#7c3aed}
-    *{box-sizing:border-box}
-    body{margin:0;font-family:Arial,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink)}
-    header{background:#fff;border-bottom:1px solid var(--line);padding:20px 28px}
-    h1{margin:0 0 6px;font-size:24px}
-    .subtitle{color:var(--muted);margin:0;font-size:14px}
-    main{max-width:1100px;margin:0 auto;padding:22px}
-    .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
-    .stats{display:grid;grid-template-columns:repeat(6,minmax(100px,1fr));gap:12px;flex:1}
-    .stat{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
-    .stat strong{display:block;font-size:22px}
-    .stat span{color:var(--muted);font-size:12px}
-    .btn{border:0;border-radius:8px;padding:10px 16px;font-weight:700;cursor:pointer;text-decoration:none;
-      display:inline-flex;align-items:center;font-size:14px}
-    .btn-scan{background:var(--accent);color:#fff}
-    .scanmsg{color:var(--muted);font-size:12px;margin-top:6px}
-    .filters{display:flex;gap:8px;align-items:center;margin:14px 0;flex-wrap:wrap}
-    .filters button{color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:999px;
-      padding:8px 14px;cursor:pointer;font-size:14px}
-    .filters button.active{background:var(--ink);color:#fff;border-color:var(--ink)}
-    .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;margin-bottom:10px;overflow:hidden}
-    .card.hot{border-color:#fdba74;box-shadow:0 0 0 1px #fed7aa inset}
-    .card-head{display:flex;align-items:center;gap:10px;padding:14px 16px;cursor:pointer}
-    .card-head:hover{background:#fafbfc}
-    .chev{transition:transform .15s;color:var(--muted);font-size:13px}
-    .card.open .chev{transform:rotate(90deg)}
-    .ttl{flex:1;min-width:0}
-    .ttl b{font-size:15px}
-    .ttl .meta{color:var(--muted);font-size:13px;margin-top:2px}
-    .badge{border-radius:999px;display:inline-block;font-weight:700;padding:5px 9px;white-space:nowrap;font-size:12px}
-    .alive{background:#dcfce7;color:#166534}
-    .unknown{background:#fef9c3;color:#854d0e}
-    .hotb{background:#ffedd5;color:#9a3412;border:1px solid #fdba74}
-    .newb{background:#2563eb;color:#fff}
-    .appliedb{background:#dbeafe;color:#1e40af}
-    .clickedb{background:#f3f4f6;color:#374151;border:1px solid #d1d5db}
-    .aib{background:#ede9fe;color:#5b21b6;border:1px solid #c4b5fd}
-    .body{display:none;border-top:1px solid var(--line);padding:16px}
-    .card.open .body{display:block}
-    .details{display:grid;gap:10px}
-    .section{background:#fbfcfe;border:1px solid var(--line);border-radius:8px;overflow:hidden}
-    .section h3{margin:0;padding:10px 12px;background:#f2f5f9;border-bottom:1px solid var(--line);
-      font-size:13px;color:#111827}
-    .section .content{white-space:pre-wrap;line-height:1.6;font-size:13.5px;color:#374151;
-      max-height:260px;overflow:auto;padding:12px}
-    .section .lang-tag{display:inline-block;font-size:11px;font-weight:700;color:var(--muted);
-      background:#eef2ff;border-radius:4px;padding:2px 6px;margin-bottom:6px}
-    .section .lang-block + .lang-block{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
-    .terms{color:#3730a3;background:var(--chip);border-radius:6px;display:inline-block;padding:6px 8px;
-      font-size:12.5px;margin:8px 0}
-    .actions{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
-    .btn-open{background:var(--accent);color:#fff}
-    .btn-apply{background:var(--good);color:#fff}
-    .btn-unapply{background:#e5e7eb;color:#374151}
-    .applied-on{color:var(--muted);font-size:12px;align-self:center}
-    .empty{padding:40px;text-align:center;color:var(--muted)}
-    .updated{color:var(--muted);font-size:12px;margin-top:14px}
-    .profile{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-bottom:14px}
-    .profile h2{margin:0 0 8px;font-size:16px}
-    .profile-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:12px}
-    .profile p{margin:0;color:#374151;font-size:13.5px;line-height:1.55}
-    .profile .chips{display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start}
-    .profile .chip{background:#f2f5f9;border:1px solid var(--line);border-radius:999px;padding:5px 8px;font-size:12px;color:#374151}
-    .mode-note{color:var(--muted);font-size:12px;margin:0 0 10px}
-    @media(max-width:760px){.stats{grid-template-columns:1fr 1fr}main{padding:14px}.profile-grid{grid-template-columns:1fr}}
+    /* ── Design tokens ─────────────────────────────────────────────────────── */
+    :root {
+      --bg:        #f0f4f9;
+      --surface:   #ffffff;
+      --border:    #dde3ed;
+      --border-lt: #edf1f7;
+      --ink:       #0d1b2e;
+      --ink2:      #374151;
+      --muted:     #6b7a99;
+      --accent:    #2563eb;
+      --accent-dk: #1d4ed8;
+      --accent-lt: #eff4ff;
+      --hot-bg:    #fff7ed;
+      --hot-bd:    #fb923c;
+      --hot-tx:    #9a3412;
+      --new-bg:    #2563eb;
+      --new-tx:    #ffffff;
+      --fit-bg:    #ecfdf5;
+      --fit-bd:    #6ee7b7;
+      --fit-tx:    #065f46;
+      --ai-bg:     #f5f3ff;
+      --ai-bd:     #c4b5fd;
+      --ai-tx:     #5b21b6;
+      --alive-bg:  #dcfce7;
+      --alive-tx:  #166534;
+      --unk-bg:    #fefce8;
+      --unk-tx:    #854d0e;
+      --app-bg:    #dbeafe;
+      --app-tx:    #1e40af;
+      --clk-bg:    #f1f5f9;
+      --clk-tx:    #475569;
+      --radius:    12px;
+      --radius-sm: 8px;
+      --radius-pill: 999px;
+      --shadow:    0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.05);
+      --shadow-md: 0 4px 12px rgba(0,0,0,.09), 0 2px 4px rgba(0,0,0,.05);
+      --trans:     .18s ease;
+    }
+
+    /* ── Reset & base ───────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.55;
+    }
+    a { color: inherit; }
+    button, .btn { font-family: inherit; }
+
+    /* ── Header ─────────────────────────────────────────────────────────────── */
+    .site-header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 18px 28px 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow);
+    }
+    .header-inner {
+      max-width: 1160px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .header-logo {
+      width: 44px; height: 44px;
+      background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .header-text { flex: 1; min-width: 0; }
+    .header-text h1 {
+      margin: 0 0 2px;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--ink);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .header-text .subtitle {
+      margin: 0;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    #mode-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--muted);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      padding: 4px 10px;
+      white-space: nowrap;
+    }
+    #mode-badge::before {
+      content: "";
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #10b981;
+      flex-shrink: 0;
+    }
+
+    /* ── Main layout ────────────────────────────────────────────────────────── */
+    main {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 24px 20px 48px;
+    }
+
+    /* ── Profile card ───────────────────────────────────────────────────────── */
+    .profile-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+    }
+    .profile-card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .profile-card-header h2 {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .profile-toggle-btn {
+      margin-right: auto;
+      font-size: 12px;
+      color: var(--muted);
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      padding: 3px 10px;
+      cursor: pointer;
+      transition: border-color var(--trans), color var(--trans);
+    }
+    .profile-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .profile-body {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 16px;
+    }
+    .profile-bio {
+      font-size: 13.5px;
+      color: var(--ink2);
+      line-height: 1.6;
+      margin: 0;
+    }
+    .profile-skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-content: flex-start;
+    }
+    .skill-chip {
+      background: var(--accent-lt);
+      border: 1px solid #c7d7fd;
+      color: #1e40af;
+      border-radius: var(--radius-pill);
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    /* ── Stats bar ──────────────────────────────────────────────────────────── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .stat-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 12px 12px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      transition: transform var(--trans), box-shadow var(--trans);
+    }
+    .stat-box:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+    .stat-box .stat-num {
+      display: block;
+      font-size: 26px;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 4px;
+      color: var(--ink);
+    }
+    .stat-box .stat-lbl {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+    .stat-box.s-fit   .stat-num { color: #059669; }
+    .stat-box.s-review .stat-num { color: #d97706; }
+    .stat-box.s-new   .stat-num { color: var(--accent); }
+    .stat-box.s-hot   .stat-num { color: #ea580c; }
+    .stat-box.s-clicked .stat-num { color: #6b7280; }
+    .stat-box.s-applied .stat-num { color: #7c3aed; }
+
+    /* ── Filters ────────────────────────────────────────────────────────────── */
+    .filters-wrap {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      margin-bottom: 16px;
+      scrollbar-width: none;
+    }
+    .filters-wrap::-webkit-scrollbar { display: none; }
+    .filter-btn {
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      color: var(--ink2);
+      border-radius: var(--radius-pill);
+      padding: 7px 15px;
+      cursor: pointer;
+      font-size: 13.5px;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: background var(--trans), border-color var(--trans), color var(--trans), box-shadow var(--trans);
+      outline: none;
+    }
+    .filter-btn:focus-visible {
+      box-shadow: 0 0 0 3px #bfdbfe;
+    }
+    .filter-btn:hover:not(.active) {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .filter-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(37,99,235,.3);
+    }
+
+    /* ── Job cards ──────────────────────────────────────────────────────────── */
+    .jobs-list { display: flex; flex-direction: column; gap: 8px; }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transition: box-shadow var(--trans), transform var(--trans);
+    }
+    .card:hover { box-shadow: var(--shadow-md); }
+    .card.hot {
+      border-color: var(--hot-bd);
+      background: linear-gradient(to left, var(--hot-bg) 0%, var(--surface) 50%);
+    }
+    .card.open { box-shadow: var(--shadow-md); }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      cursor: pointer;
+      user-select: none;
+      transition: background var(--trans);
+    }
+    .card-head:hover { background: var(--bg); }
+    .card-head:focus-visible { outline: 3px solid #bfdbfe; outline-offset: -3px; }
+
+    .card-chev {
+      flex-shrink: 0;
+      width: 22px; height: 22px;
+      border-radius: 6px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      transition: transform var(--trans), background var(--trans);
+    }
+    .card-chev svg { width: 10px; height: 10px; fill: none; stroke: var(--muted); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+    .card.open .card-chev { transform: rotate(90deg); background: var(--accent-lt); border-color: #c7d7fd; }
+    .card.open .card-chev svg { stroke: var(--accent); }
+
+    .card-info { flex: 1; min-width: 0; }
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--ink);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 3px;
+    }
+    .card-meta {
+      font-size: 12.5px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .card-meta .dot { margin: 0 5px; opacity: .5; }
+
+    .badge-row {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      max-width: 280px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      border-radius: var(--radius-pill);
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 3px 9px;
+      white-space: nowrap;
+    }
+    .badge-new     { background: var(--new-bg);   color: var(--new-tx); }
+    .badge-hot     { background: #fff7ed; color: #c2410c; border: 1px solid #fdba74; }
+    .badge-fit     { background: var(--fit-bg);   color: var(--fit-tx); border: 1px solid var(--fit-bd); }
+    .badge-alive   { background: var(--alive-bg); color: var(--alive-tx); }
+    .badge-unknown { background: var(--unk-bg);   color: var(--unk-tx); }
+    .badge-applied { background: var(--app-bg);   color: var(--app-tx); }
+    .badge-clicked { background: var(--clk-bg);   color: var(--clk-tx); }
+    .badge-ai      { background: var(--ai-bg);    color: var(--ai-tx);  border: 1px solid var(--ai-bd); }
+
+    /* ── Card body ──────────────────────────────────────────────────────────── */
+    .card-body {
+      display: none;
+      border-top: 1px solid var(--border-lt);
+      padding: 16px 18px 18px;
+    }
+    .card.open .card-body { display: block; }
+
+    .details-grid { display: grid; gap: 10px; }
+
+    .section-box {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: #fcfcfe;
+    }
+    .section-box h3 {
+      margin: 0;
+      padding: 9px 14px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border-lt);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: var(--muted);
+    }
+    .section-box .section-content {
+      padding: 12px 14px;
+      font-size: 13.5px;
+      line-height: 1.65;
+      color: var(--ink2);
+      white-space: pre-wrap;
+      max-height: 280px;
+      overflow-y: auto;
+    }
+    .section-box .section-content::-webkit-scrollbar { width: 4px; }
+    .section-box .section-content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .lang-tag {
+      display: inline-block;
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: .05em;
+      color: var(--muted);
+      background: var(--accent-lt);
+      border-radius: 4px;
+      padding: 2px 6px;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+    }
+    .lang-block + .lang-block {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border);
+    }
+
+    /* Fit reason box */
+    .section-box.box-reason h3 { background: var(--fit-bg); color: var(--fit-tx); }
+    .section-box.box-reason    { border-color: var(--fit-bd); }
+    .section-box.box-ai    h3  { background: var(--ai-bg);   color: var(--ai-tx); }
+    .section-box.box-ai        { border-color: var(--ai-bd); }
+    .section-box.box-hot   h3  { background: var(--hot-bg);  color: var(--hot-tx); }
+
+    /* ── Card actions ───────────────────────────────────────────────────────── */
+    .card-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 9px 16px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity var(--trans), transform var(--trans), box-shadow var(--trans);
+      outline: none;
+    }
+    .btn:active { transform: scale(.97); }
+    .btn:focus-visible { box-shadow: 0 0 0 3px #bfdbfe; }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(37,99,235,.25);
+    }
+    .btn-primary:hover { background: var(--accent-dk); }
+    .btn-success {
+      background: #059669;
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(5,150,105,.2);
+    }
+    .btn-success:hover { background: #047857; }
+    .btn-ghost {
+      background: var(--bg);
+      color: var(--ink2);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { border-color: #94a3b8; }
+    .applied-note { font-size: 12px; color: var(--muted); align-self: center; }
+
+    /* ── Empty state ────────────────────────────────────────────────────────── */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+    }
+    .empty-state svg { width: 48px; height: 48px; margin-bottom: 12px; opacity: .4; }
+    .empty-state p { margin: 0; font-size: 15px; }
+
+    /* ── Footer note ────────────────────────────────────────────────────────── */
+    .footer-note {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 20px;
+    }
+
+    /* ── Loading skeleton ───────────────────────────────────────────────────── */
+    @keyframes shimmer { to { background-position: left; } }
+    .skeleton-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      height: 70px;
+      background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+      background-size: 200%;
+      animation: shimmer 1.4s infinite;
+    }
+
+    /* ── Responsive ─────────────────────────────────────────────────────────── */
+    @media (max-width: 860px) {
+      .stats-row { grid-template-columns: repeat(3, 1fr); }
+      .badge-row { max-width: 200px; }
+    }
+    @media (max-width: 600px) {
+      .site-header { padding: 14px 16px; }
+      main { padding: 16px 12px 40px; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+      .profile-body { grid-template-columns: 1fr; }
+      .badge-row { display: none; }
+      .card-head { padding: 12px 14px; }
+      .card-body { padding: 12px 14px 16px; }
+      .header-text h1 { font-size: 17px; }
+      #mode-badge { display: none; }
+    }
   </style>
 </head>
 <body>
-  <header>
-    <h1>מערכת חיפוש משרות — מורן 🔬</h1>
-    <p class="subtitle">R&amp;D · Medical · Mechanical · Lab Technician · Process · NPI — משרות פעילות בישראל מהחודש האחרון. לחצי על משרה לפתיחת הדרישות המלאות.</p>
-  </header>
 
-  <main>
-    <section class="profile">
-      <h2>פרופיל מורן להתאמת משרות</h2>
-      <div class="profile-grid">
-        <p>
-          Lab technician engineering R&amp;D מ־2024, B.Sc. Medical Engineering מאפקה
-          עם התמחות במכניקת מערכות פיזיולוגיות. ניסיון בהפעלה, תחזוקה, הרכבה
-          וכיול ביוריאקטורים, ניתוח נתוני תהליך ב־DOT systems ו־Excel, תמיכה
-          באופטימיזציית תהליך ופתרונות לחיסכון במים בתרביות תאים בקנה מידה גדול.
-        </p>
-        <div class="chips" aria-label="skills">
-          <span class="chip">SolidWorks</span><span class="chip">3D printing</span>
-          <span class="chip">Bioreactors</span><span class="chip">Cell culture</span>
-          <span class="chip">DOT systems</span><span class="chip">FlexCell</span>
-          <span class="chip">TruBio</span><span class="chip">Cellaca</span>
-          <span class="chip">MFCS</span><span class="chip">Cedex BioAnalyzer</span>
-          <span class="chip">Masterflex</span><span class="chip">MATLAB</span>
-          <span class="chip">Python</span><span class="chip">Excel</span>
-          <span class="chip">IUD prototype</span>
-        </div>
-      </div>
-    </section>
-    <p class="mode-note" id="mode-note"></p>
+<!-- ═══════════════════════════════════════════════════════════ HEADER ══════ -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-logo" aria-hidden="true">🔬</div>
+    <div class="header-text">
+      <h1>חיפוש משרות — מורן</h1>
+      <p class="subtitle">R&amp;D · Medical · Mechanical · Lab · Process · NPI — משרות פעילות בישראל מהחודש האחרון</p>
+    </div>
+    <span id="mode-badge">טוען…</span>
+  </div>
+</header>
 
-    <div class="topbar">
-      <div class="stats">
-        <div class="stat"><strong id="s-total">0</strong><span>משרות מתאימות</span></div>
-        <div class="stat"><strong id="s-review">0</strong><span>פחות מתאימות</span></div>
-        <div class="stat"><strong id="s-new">0</strong><span>חדשות</span></div>
-        <div class="stat"><strong id="s-hot">🔥 0</strong><span>לוהטות</span></div>
-        <div class="stat"><strong id="s-clicked">0</strong><span>נלחצו</span></div>
-        <div class="stat"><strong id="s-applied">0</strong><span>הגשתי</span></div>
+<!-- ═══════════════════════════════════════════════════════════ MAIN ════════ -->
+<main>
+
+  <!-- Profile card -->
+  <section class="profile-card" id="profile-section">
+    <div class="profile-card-header">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+      </svg>
+      <h2>פרופיל מורן — התאמת משרות</h2>
+      <button class="profile-toggle-btn" id="profile-toggle" aria-expanded="true" aria-controls="profile-body">הסתרה</button>
+    </div>
+    <div class="profile-body" id="profile-body">
+      <p class="profile-bio">
+        Lab Technician Engineering R&amp;D מ־2024, B.Sc. Medical Engineering מאפקה עם התמחות
+        במכניקת מערכות פיזיולוגיות. ניסיון בהפעלה, תחזוקה, הרכבה וכיול ביוריאקטורים,
+        ניתוח נתוני תהליך ב־DOT systems ו־Excel, תמיכה באופטימיזציית תהליך ופתרונות
+        לחיסכון במים בתרביות תאים בקנה מידה גדול.
+      </p>
+      <div class="profile-skills" role="list" aria-label="כישורים">
+        <span class="skill-chip" role="listitem">SolidWorks</span>
+        <span class="skill-chip" role="listitem">3D Printing</span>
+        <span class="skill-chip" role="listitem">Bioreactors</span>
+        <span class="skill-chip" role="listitem">Cell Culture</span>
+        <span class="skill-chip" role="listitem">DOT Systems</span>
+        <span class="skill-chip" role="listitem">FlexCell</span>
+        <span class="skill-chip" role="listitem">TruBio</span>
+        <span class="skill-chip" role="listitem">Cellaca</span>
+        <span class="skill-chip" role="listitem">MFCS</span>
+        <span class="skill-chip" role="listitem">Cedex BioAnalyzer</span>
+        <span class="skill-chip" role="listitem">Masterflex</span>
+        <span class="skill-chip" role="listitem">MATLAB</span>
+        <span class="skill-chip" role="listitem">Python</span>
+        <span class="skill-chip" role="listitem">Excel</span>
+        <span class="skill-chip" role="listitem">IUD Prototype</span>
       </div>
     </div>
+  </section>
 
-    <div class="filters">
-      <button data-f="fit" class="active">מתאימות למורן</button>
-      <button data-f="review">פחות מתאימות, שוות בדיקה</button>
-      <button data-f="new">🆕 חדשות</button>
-      <button data-f="hot">🔥 לוהטות</button>
-      <button data-f="ai">AI ממליץ</button>
-      <button data-f="all">הכל</button>
-      <button data-f="alive">פעילות</button>
-      <button data-f="clicked">נלחצו</button>
-      <button data-f="applied">✓ הגשתי</button>
+  <!-- Stats row -->
+  <div class="stats-row" role="region" aria-label="סטטיסטיקות">
+    <div class="stat-box s-fit">
+      <span class="stat-num" id="s-total">—</span>
+      <span class="stat-lbl">מתאימות</span>
     </div>
+    <div class="stat-box s-review">
+      <span class="stat-num" id="s-review">—</span>
+      <span class="stat-lbl">לבדיקה</span>
+    </div>
+    <div class="stat-box s-new">
+      <span class="stat-num" id="s-new">—</span>
+      <span class="stat-lbl">חדשות</span>
+    </div>
+    <div class="stat-box s-hot">
+      <span class="stat-num" id="s-hot">—</span>
+      <span class="stat-lbl">🔥 לוהטות</span>
+    </div>
+    <div class="stat-box s-clicked">
+      <span class="stat-num" id="s-clicked">—</span>
+      <span class="stat-lbl">נלחצו</span>
+    </div>
+    <div class="stat-box s-applied">
+      <span class="stat-num" id="s-applied">—</span>
+      <span class="stat-lbl">הגשתי</span>
+    </div>
+  </div>
 
-    <div id="list"><div class="empty">טוען משרות…</div></div>
-    <p class="updated" id="updated"></p>
-  </main>
+  <!-- Filter tabs -->
+  <div class="filters-wrap" role="tablist" aria-label="סינון משרות">
+    <button class="filter-btn active" data-f="fit"     role="tab" aria-selected="true">✦ מתאימות</button>
+    <button class="filter-btn"        data-f="review"  role="tab">שוות בדיקה</button>
+    <button class="filter-btn"        data-f="new"     role="tab">🆕 חדשות</button>
+    <button class="filter-btn"        data-f="hot"     role="tab">🔥 לוהטות</button>
+    <button class="filter-btn"        data-f="ai"      role="tab">✦ AI ממליץ</button>
+    <button class="filter-btn"        data-f="all"     role="tab">הכל</button>
+    <button class="filter-btn"        data-f="alive"   role="tab">פעילות</button>
+    <button class="filter-btn"        data-f="clicked" role="tab">נלחצו</button>
+    <button class="filter-btn"        data-f="applied" role="tab">✓ הגשתי</button>
+  </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getDatabase, ref, get, set, remove }
-      from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-    import {
-      DEFAULT_SECTION_ORDER,
-      parseJobSummary,
-      sectionDisplayLabel,
-    } from "./job_sections.js";
+  <!-- Job list -->
+  <div class="jobs-list" id="list" role="list">
+    <div class="skeleton-card"></div>
+    <div class="skeleton-card"></div>
+    <div class="skeleton-card"></div>
+  </div>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyBSg1UOm38SoHUeJFFutIpkTz-Ieeddiq0",
-      authDomain: "moran-cce72.firebaseapp.com",
-      databaseURL: "https://moran-cce72-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "moran-cce72",
-      storageBucket: "moran-cce72.firebasestorage.app",
-      messagingSenderId: "745378545086",
-      appId: "1:745378545086:web:fc33c046d215911d140def",
-      measurementId: "G-ZX02NHPLCN"
-    };
-    const app = initializeApp(firebaseConfig);
-    try { getAnalytics(app); } catch (e) {}
-    const auth = getAuth(app);
-    signInAnonymously(auth).catch(e => console.warn("Anonymous auth failed", e));
-    const db = getDatabase(app);
-    const localHost = ["127.0.0.1", "localhost", "::1"].includes(location.hostname);
-    document.getElementById("mode-note").textContent = localHost
-      ? "מצב מקומי: הנתונים נטענים מהשרת המקומי, עם סנכרון Firebase כאשר זמין."
-      : "מצב חי: הנתונים מסונכרנים מול Firebase.";
+  <p class="footer-note" id="updated"></p>
 
-    let allJobs = [], applied = {}, clicked = {}, filter = "fit";
-    const esc = s => (s||"").replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
-    function jobId(link){ let h=5381; for(let i=0;i<link.length;i++) h=((h*33)^link.charCodeAt(i))>>>0; return "j"+h.toString(16); }
-    const fmtDate = iso => { try { return new Date(iso).toLocaleDateString("he-IL"); } catch(e){ return iso; } };
+</main>
 
-    const langLabel = { he: "עברית", en: "English" };
-    const renderLangBlock = (lang, lines) => {
-      if (!lines || !lines.length) return "";
-      return `<div class="lang-block"><span class="lang-tag">${langLabel[lang]}</span><div>${esc(lines.join("\n"))}</div></div>`;
-    };
-    const sectionBox = (title, block) => {
-      if (!block) return "";
-      const he = block.he || [];
-      const en = block.en || [];
-      if (!he.length && !en.length) return "";
-      const body = renderLangBlock("he", he) + renderLangBlock("en", en);
-      return `<section class="section"><h3>${esc(title)}</h3><div class="content">${body}</div></section>`;
-    };
-    const textSectionBox = (title, text) => text
-      ? `<section class="section"><h3>${esc(title)}</h3><div class="content">${esc(text)}</div></section>` : "";
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+  import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getDatabase, ref, get, set, remove }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+  import {
+    DEFAULT_SECTION_ORDER,
+    parseJobSummary,
+    sectionDisplayLabel,
+  } from "./job_sections.js";
 
-    function renderJobDetails(j){
-      const detailText = j.requirements || j.description || "";
-      const sections = j.summary_sections || parseJobSummary(detailText);
-      const reason = j.fit_reason ? textSectionBox("למה זה מתאים למורן", j.fit_reason) : "";
-      const aiReason = j.ai_fit_reason
-        ? textSectionBox(`בדיקת Gemini (${j.ai_fit_category || "review"} · ${j.ai_fit_confidence || 0}%)`, j.ai_fit_reason)
-        : "";
-      const terms = j.matched_terms ? textSectionBox("התאמות שנמצאו", j.matched_terms) : "";
-      const hasSection = key => sections[key] && ((sections[key].he || []).length || (sections[key].en || []).length);
-      const mainKeys = DEFAULT_SECTION_ORDER.filter(key => key !== "additional" && hasSection(key));
-      const mainSections = mainKeys
-        .map(key => sectionBox(sectionDisplayLabel(key, "he"), sections[key]))
-        .join("");
-      const additional = hasSection("additional")
-        ? sectionBox(sectionDisplayLabel("additional", "he"), sections.additional)
-        : "";
-      const rawFallback = !mainSections && !additional && detailText
-        ? textSectionBox("פירוט שנמצא", detailText)
-        : "";
-      const missing = !mainSections && !additional && !detailText
-        ? textSectionBox("פירוט המשרה", "לא הצלחתי למשוך פירוט מלא מאתר המשרה. כדאי לפתוח את עמוד המשרה המקורי.")
-        : "";
-      return `<div class="details">${reason}${aiReason}${mainSections}${rawFallback}${terms}${additional}${missing}</div>`;
-    }
+  /* ── Firebase init ──────────────────────────────────────────────────────── */
+  const firebaseConfig = {
+    apiKey: "AIzaSyBSg1UOm38SoHUeJFFutIpkTz-Ieeddiq0",
+    authDomain: "moran-cce72.firebaseapp.com",
+    databaseURL: "https://moran-cce72-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "moran-cce72",
+    storageBucket: "moran-cce72.firebasestorage.app",
+    messagingSenderId: "745378545086",
+    appId: "1:745378545086:web:fc33c046d215911d140def",
+    measurementId: "G-ZX02NHPLCN",
+  };
+  const app = initializeApp(firebaseConfig);
+  try { getAnalytics(app); } catch (e) {}
+  const auth = getAuth(app);
+  signInAnonymously(auth).catch(e => console.warn("Anonymous auth failed", e));
+  const db = getDatabase(app);
 
-    async function loadJobs(){
-      // Prefer live Realtime Database; fall back to the static jobs.json.
-      try {
-        const snap = await get(ref(db, "jobs"));
-        if (snap.exists()) {
-          const v = snap.val();
-          return Array.isArray(v) ? v.filter(Boolean) : Object.values(v);
-        }
-      } catch(e){ console.warn("RTDB jobs read failed, using jobs.json", e); }
-      const r = await fetch("jobs.json?ts=" + Date.now());
-      return (await r.json()).jobs || [];
-    }
-    async function loadApplied(){
-      applied = {};
-      try {
-        const snap = await get(ref(db, "applied"));
-        if (snap.exists()) Object.values(snap.val()).forEach(x => { if (x && x.link) applied[x.link] = x.appliedAt; });
-      } catch(e){ console.warn("RTDB applied read failed", e); }
-    }
-    async function loadClicked(){
-      clicked = {};
-      try {
-        const snap = await get(ref(db, "clicked"));
-        if (snap.exists()) Object.values(snap.val()).forEach(x => { if (x && x.link) clicked[x.link] = x.clickedAt; });
-      } catch(e){ console.warn("RTDB clicked read failed", e); }
-    }
-    async function markClicked(job, rerender = true){
-      const at = new Date().toISOString();
-      const wasClicked = !!clicked[job.link];
-      clicked[job.link] = at;
-      if (rerender) {
-        render();
-      } else if (!wasClicked) {
-        document.getElementById("s-clicked").textContent = Object.keys(clicked).length;
+  /* ── Mode badge ─────────────────────────────────────────────────────────── */
+  const localHost = ["127.0.0.1", "localhost", "::1"].includes(location.hostname);
+  document.getElementById("mode-badge").textContent = localHost ? "מקומי" : "Firebase Live";
+
+  /* ── Profile toggle ─────────────────────────────────────────────────────── */
+  const profileToggle = document.getElementById("profile-toggle");
+  const profileBody   = document.getElementById("profile-body");
+  profileToggle.addEventListener("click", () => {
+    const expanded = profileToggle.getAttribute("aria-expanded") === "true";
+    profileBody.style.display = expanded ? "none" : "";
+    profileToggle.setAttribute("aria-expanded", String(!expanded));
+    profileToggle.textContent = expanded ? "הצגה" : "הסתרה";
+  });
+
+  /* ── Utils ──────────────────────────────────────────────────────────────── */
+  let allJobs = [], applied = {}, clicked = {}, filter = "fit";
+
+  const esc = s => (s || "").replace(/[&<>"]/g,
+    c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  function jobId(link) {
+    let h = 5381;
+    for (let i = 0; i < link.length; i++) h = ((h * 33) ^ link.charCodeAt(i)) >>> 0;
+    return "j" + h.toString(16);
+  }
+
+  const fmtDate = iso => {
+    try { return new Date(iso).toLocaleDateString("he-IL"); } catch (e) { return iso; }
+  };
+
+  /* ── Section rendering ──────────────────────────────────────────────────── */
+  const langLabel = { he: "עברית", en: "English" };
+
+  const renderLangBlock = (lang, lines) => {
+    if (!lines || !lines.length) return "";
+    return `<div class="lang-block"><span class="lang-tag">${langLabel[lang]}</span><div>${esc(lines.join("\n"))}</div></div>`;
+  };
+
+  const sectionBox = (title, block, extraClass = "") => {
+    if (!block) return "";
+    const he = block.he || [], en = block.en || [];
+    if (!he.length && !en.length) return "";
+    const body = renderLangBlock("he", he) + renderLangBlock("en", en);
+    return `<div class="section-box ${extraClass}"><h3>${esc(title)}</h3><div class="section-content">${body}</div></div>`;
+  };
+
+  const textSectionBox = (title, text, extraClass = "") => text
+    ? `<div class="section-box ${extraClass}"><h3>${esc(title)}</h3><div class="section-content">${esc(text)}</div></div>` : "";
+
+  function renderJobDetails(j) {
+    const detailText = j.requirements || j.description || "";
+    const sections = j.summary_sections || parseJobSummary(detailText);
+
+    const reason  = j.fit_reason ? textSectionBox("✦ למה זה מתאים למורן", j.fit_reason, "box-reason") : "";
+    const aiReason = j.ai_fit_reason
+      ? textSectionBox(
+          `✦ Gemini — ${j.ai_fit_category || "review"} (${j.ai_fit_confidence || 0}%)`,
+          j.ai_fit_reason, "box-ai")
+      : "";
+
+    const hasSection = key =>
+      sections[key] && ((sections[key].he || []).length || (sections[key].en || []).length);
+    const mainKeys = DEFAULT_SECTION_ORDER.filter(k => k !== "additional" && hasSection(k));
+    const mainSections = mainKeys
+      .map(k => sectionBox(sectionDisplayLabel(k, "he"), sections[k]))
+      .join("");
+    const additional = hasSection("additional")
+      ? sectionBox(sectionDisplayLabel("additional", "he"), sections.additional) : "";
+    const rawFallback = !mainSections && !additional && detailText
+      ? textSectionBox("פירוט שנמצא", detailText) : "";
+    const missing = !mainSections && !additional && !detailText
+      ? textSectionBox("פירוט המשרה",
+          "לא הצלחתי למשוך פירוט מלא מאתר המשרה. כדאי לפתוח את עמוד המשרה המקורי.") : "";
+    const terms = j.matched_terms
+      ? textSectionBox("מילות התאמה שנמצאו", j.matched_terms) : "";
+
+    return `<div class="details-grid">${reason}${aiReason}${mainSections}${rawFallback}${terms}${additional}${missing}</div>`;
+  }
+
+  /* ── Data loading ───────────────────────────────────────────────────────── */
+  async function loadJobs() {
+    try {
+      const snap = await get(ref(db, "jobs"));
+      if (snap.exists()) {
+        const v = snap.val();
+        return Array.isArray(v) ? v.filter(Boolean) : Object.values(v);
       }
-      try { await set(ref(db, "clicked/" + jobId(job.link)),
-        { link: job.link, title: job.title, company: job.company, clickedAt: at }); }
-      catch(e){ console.warn("שמירת נלחץ נכשלה", e); }
-    }
-    async function apply(job){
-      const at = new Date().toISOString();
-      applied[job.link] = at; render();
-      try { await set(ref(db, "applied/" + jobId(job.link)),
-        { link: job.link, title: job.title, company: job.company, appliedAt: at }); }
-      catch(e){ alert("שמירת ההגשה נכשלה. ודאי ש-Realtime Database מופעל ושהכללים נפרסו."); console.error(e); }
-    }
-    async function unapply(link){
-      delete applied[link]; render();
-      try { await remove(ref(db, "applied/" + jobId(link))); } catch(e){ console.error(e); }
-    }
+    } catch (e) { console.warn("RTDB jobs read failed, using jobs.json", e); }
+    const r = await fetch("jobs.json?ts=" + Date.now());
+    return (await r.json()).jobs || [];
+  }
 
-    function visibleJobs(){
-      if (filter === "applied") return allJobs.filter(j => applied[j.link]);
-      let jobs = allJobs.filter(j => !applied[j.link]);
-      if (filter === "fit")   jobs = jobs.filter(j => (j.fit_category || "fit") === "fit");
-      else if (filter === "review") jobs = jobs.filter(j => j.fit_category === "review");
-      else if (filter === "new")   jobs = jobs.filter(j => j.is_new);
-      else if (filter === "hot")   jobs = jobs.filter(j => j.is_hot);
-      else if (filter === "ai")    jobs = jobs.filter(j => j.ai_fit_category === "fit" || j.ai_fit_category === "review");
-      else if (filter === "alive") jobs = jobs.filter(j => j.alive_status === "alive");
-      else if (filter === "clicked") jobs = jobs.filter(j => clicked[j.link]);
-      return jobs;
-    }
+  async function loadApplied() {
+    applied = {};
+    try {
+      const snap = await get(ref(db, "applied"));
+      if (snap.exists())
+        Object.values(snap.val()).forEach(x => { if (x?.link) applied[x.link] = x.appliedAt; });
+    } catch (e) { console.warn("RTDB applied read failed", e); }
+  }
 
-    function render(){
-      const list = document.getElementById("list");
-      const jobs = visibleJobs();
-      const active = allJobs.filter(j => !applied[j.link]);
-      document.getElementById("s-total").textContent = active.filter(j => (j.fit_category || "fit") === "fit").length;
-      document.getElementById("s-review").textContent = active.filter(j => j.fit_category === "review").length;
-      document.getElementById("s-new").textContent = active.filter(j => j.is_new).length;
-      document.getElementById("s-hot").textContent = "🔥 " + active.filter(j => j.is_hot).length;
+  async function loadClicked() {
+    clicked = {};
+    try {
+      const snap = await get(ref(db, "clicked"));
+      if (snap.exists())
+        Object.values(snap.val()).forEach(x => { if (x?.link) clicked[x.link] = x.clickedAt; });
+    } catch (e) { console.warn("RTDB clicked read failed", e); }
+  }
+
+  async function markClicked(job, rerender = true) {
+    const at = new Date().toISOString();
+    const wasClicked = !!clicked[job.link];
+    clicked[job.link] = at;
+    if (rerender) render();
+    else if (!wasClicked)
       document.getElementById("s-clicked").textContent = Object.keys(clicked).length;
-      document.getElementById("s-applied").textContent = Object.keys(applied).length;
+    try {
+      await set(ref(db, "clicked/" + jobId(job.link)),
+        { link: job.link, title: job.title, company: job.company, clickedAt: at });
+    } catch (e) { console.warn("שמירת נלחץ נכשלה", e); }
+  }
 
-      if (!jobs.length){ list.innerHTML = '<div class="empty">אין משרות להצגה בכרטיסייה הזו.</div>'; return; }
-      list.innerHTML = jobs.map((j, i) => {
-        const isApplied = !!applied[j.link];
-        const newB  = j.is_new ? '<span class="badge newb">חדש</span>' : "";
-        const hotB  = j.is_hot ? `<span class="badge hotb" title="${esc(j.hot_terms)}">🔥 לוהטת</span>` : "";
-        const aiB = j.ai_fit_category
-          ? `<span class="badge aib" title="${esc(j.ai_fit_reason || "")}">AI ${esc(j.ai_fit_category)} ${j.ai_fit_confidence || 0}%</span>`
-          : "";
-        const liveB = j.alive_status === "alive" ? '<span class="badge alive">פעילה</span>' : '<span class="badge unknown">לא ודאי</span>';
-        const clickedB = clicked[j.link] ? `<span class="badge clickedb">נלחץ ${fmtDate(clicked[j.link])}</span>` : "";
-        const appB  = isApplied ? `<span class="badge appliedb">✓ הוגש ${fmtDate(applied[j.link])}</span>` : "";
-        const details = renderJobDetails(j);
-        const applyBtn = isApplied
-          ? `<button class="btn btn-unapply" data-unapply="${esc(j.link)}">בטל הגשה</button>`
-          : `<button class="btn btn-apply" data-apply="${i}">הגשתי ✓</button>`;
-        return `<div class="card ${j.is_hot?'hot':''}">
-          <div class="card-head" data-toggle="${i}">
-            <span class="chev">▶</span>
-            <div class="ttl"><b>${esc(j.title)}</b><div class="meta">${esc(j.company)} · ${esc(j.location)} · ${esc(j.source)}</div></div>
-            ${newB} ${hotB} ${aiB} ${clickedB} ${appB} ${liveB}
+  async function apply(job) {
+    const at = new Date().toISOString();
+    applied[job.link] = at;
+    render();
+    try {
+      await set(ref(db, "applied/" + jobId(job.link)),
+        { link: job.link, title: job.title, company: job.company, appliedAt: at });
+    } catch (e) {
+      alert("שמירת ההגשה נכשלה. ודאי ש-Realtime Database מופעל ושהכללים נפרסו.");
+      console.error(e);
+    }
+  }
+
+  async function unapply(link) {
+    delete applied[link];
+    render();
+    try { await remove(ref(db, "applied/" + jobId(link))); } catch (e) { console.error(e); }
+  }
+
+  /* ── Filtering ──────────────────────────────────────────────────────────── */
+  function visibleJobs() {
+    if (filter === "applied") return allJobs.filter(j => applied[j.link]);
+    let jobs = allJobs.filter(j => !applied[j.link]);
+    if      (filter === "fit")     jobs = jobs.filter(j => (j.fit_category || "fit") === "fit");
+    else if (filter === "review")  jobs = jobs.filter(j => j.fit_category === "review");
+    else if (filter === "new")     jobs = jobs.filter(j => j.is_new);
+    else if (filter === "hot")     jobs = jobs.filter(j => j.is_hot);
+    else if (filter === "ai")      jobs = jobs.filter(j => j.ai_fit_category === "fit" || j.ai_fit_category === "review");
+    else if (filter === "alive")   jobs = jobs.filter(j => j.alive_status === "alive");
+    else if (filter === "clicked") jobs = jobs.filter(j => clicked[j.link]);
+    return jobs;
+  }
+
+  /* ── Render ─────────────────────────────────────────────────────────────── */
+  const CHEVRON_SVG = `<svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>`;
+
+  function render() {
+    const list = document.getElementById("list");
+    const jobs  = visibleJobs();
+    const active = allJobs.filter(j => !applied[j.link]);
+
+    document.getElementById("s-total").textContent   = active.filter(j => (j.fit_category || "fit") === "fit").length;
+    document.getElementById("s-review").textContent  = active.filter(j => j.fit_category === "review").length;
+    document.getElementById("s-new").textContent     = active.filter(j => j.is_new).length;
+    document.getElementById("s-hot").textContent     = active.filter(j => j.is_hot).length;
+    document.getElementById("s-clicked").textContent = Object.keys(clicked).length;
+    document.getElementById("s-applied").textContent = Object.keys(applied).length;
+
+    if (!jobs.length) {
+      list.innerHTML = `
+        <div class="empty-state">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <p>אין משרות להצגה בכרטיסייה הזו.</p>
+        </div>`;
+      return;
+    }
+
+    list.innerHTML = jobs.map((j, i) => {
+      const isApplied = !!applied[j.link];
+
+      const newB    = j.is_new
+        ? `<span class="badge badge-new">חדש</span>` : "";
+      const hotB    = j.is_hot
+        ? `<span class="badge badge-hot" title="${esc(j.hot_terms)}">🔥 לוהטת</span>` : "";
+      const aiB     = j.ai_fit_category
+        ? `<span class="badge badge-ai" title="${esc(j.ai_fit_reason || "")}">AI ${esc(j.ai_fit_confidence || 0)}%</span>` : "";
+      const liveB   = j.alive_status === "alive"
+        ? `<span class="badge badge-alive">פעילה</span>`
+        : `<span class="badge badge-unknown">לא ודאי</span>`;
+      const clickB  = clicked[j.link]
+        ? `<span class="badge badge-clicked">נלחץ ${fmtDate(clicked[j.link])}</span>` : "";
+      const appB    = isApplied
+        ? `<span class="badge badge-applied">✓ הוגש ${fmtDate(applied[j.link])}</span>` : "";
+
+      const details = renderJobDetails(j);
+
+      const applyBtn = isApplied
+        ? `<button class="btn btn-ghost" data-unapply="${esc(j.link)}">ביטול הגשה</button>`
+        : `<button class="btn btn-success" data-apply="${i}">הגשתי ✓</button>`;
+
+      const appliedNote = isApplied
+        ? `<span class="applied-note">הוגש ${fmtDate(applied[j.link])}</span>` : "";
+
+      return `
+        <div class="card ${j.is_hot ? "hot" : ""}" role="listitem">
+          <div class="card-head" data-toggle="${i}" tabindex="0" role="button"
+               aria-expanded="false" aria-label="${esc(j.title)} ב-${esc(j.company)}">
+            <div class="card-chev">${CHEVRON_SVG}</div>
+            <div class="card-info">
+              <div class="card-title">${esc(j.title)}</div>
+              <div class="card-meta">
+                ${esc(j.company)}<span class="dot">·</span>${esc(j.location)}<span class="dot">·</span>${esc(j.source)}
+              </div>
+            </div>
+            <div class="badge-row">${newB} ${hotB} ${aiB} ${clickB} ${appB} ${liveB}</div>
           </div>
-          <div class="body">
+          <div class="card-body">
             ${details}
-            <div class="actions">
-              <a class="btn btn-open" href="${esc(j.link)}" target="_blank" rel="noreferrer" data-open="${i}">פתיחת עמוד המשרה ↗</a>
+            <div class="card-actions">
+              <a class="btn btn-primary" href="${esc(j.link)}" target="_blank" rel="noreferrer"
+                 data-open="${i}">פתיחת המשרה ↗</a>
               ${applyBtn}
+              ${appliedNote}
             </div>
           </div>
         </div>`;
-      }).join("");
-      list.querySelectorAll("[data-toggle]").forEach(el =>
-        el.addEventListener("click", () => {
-          el.closest(".card").classList.toggle("open");
-          markClicked(jobs[+el.dataset.toggle], false);
-        }));
-      list.querySelectorAll("[data-apply]").forEach(el =>
-        el.addEventListener("click", e => { e.stopPropagation(); apply(jobs[+el.dataset.apply]); }));
-      list.querySelectorAll("[data-unapply]").forEach(el =>
-        el.addEventListener("click", e => { e.stopPropagation(); unapply(el.dataset.unapply); }));
-      list.querySelectorAll("[data-open]").forEach(el =>
-        el.addEventListener("click", e => { e.stopPropagation(); markClicked(jobs[+el.dataset.open]); }));
-    }
+    }).join("");
 
-    document.querySelectorAll(".filters button").forEach(b => b.classList.toggle("active", b.dataset.f === filter));
-    document.querySelectorAll(".filters button").forEach(btn =>
-      btn.addEventListener("click", () => {
-        document.querySelectorAll(".filters button").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active"); filter = btn.dataset.f; render();
-      }));
-
-    async function loadAll(){
-      const [jobs] = await Promise.all([loadJobs(), loadApplied(), loadClicked()]);
-      allJobs = jobs || [];
-      try {
-        const meta = await get(ref(db, "meta"));
-        if (meta.exists() && meta.val().generated_at)
-          document.getElementById("updated").textContent =
-            "עודכן לאחרונה: " + new Date(meta.val().generated_at).toLocaleString("he-IL");
-      } catch(e){}
-      render();
-    }
-    loadAll().catch(err => {
-      document.getElementById("list").innerHTML = '<div class="empty">שגיאה בטעינת הנתונים</div>';
-      console.error(err);
+    /* Event listeners */
+    list.querySelectorAll("[data-toggle]").forEach(el => {
+      const activate = () => {
+        const card = el.closest(".card");
+        card.classList.toggle("open");
+        el.setAttribute("aria-expanded", card.classList.contains("open"));
+        markClicked(jobs[+el.dataset.toggle], false);
+      };
+      el.addEventListener("click", activate);
+      el.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); activate(); } });
     });
-  </script>
+    list.querySelectorAll("[data-apply]").forEach(el =>
+      el.addEventListener("click", e => { e.stopPropagation(); apply(jobs[+el.dataset.apply]); }));
+    list.querySelectorAll("[data-unapply]").forEach(el =>
+      el.addEventListener("click", e => { e.stopPropagation(); unapply(el.dataset.unapply); }));
+    list.querySelectorAll("[data-open]").forEach(el =>
+      el.addEventListener("click", e => { e.stopPropagation(); markClicked(jobs[+el.dataset.open]); }));
+  }
+
+  /* ── Filter buttons ─────────────────────────────────────────────────────── */
+  document.querySelectorAll(".filter-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".filter-btn").forEach(b => {
+        b.classList.remove("active");
+        b.setAttribute("aria-selected", "false");
+      });
+      btn.classList.add("active");
+      btn.setAttribute("aria-selected", "true");
+      filter = btn.dataset.f;
+      render();
+    });
+  });
+
+  /* ── Boot ───────────────────────────────────────────────────────────────── */
+  async function loadAll() {
+    const [jobs] = await Promise.all([loadJobs(), loadApplied(), loadClicked()]);
+    allJobs = jobs || [];
+    try {
+      const meta = await get(ref(db, "meta"));
+      if (meta.exists() && meta.val().generated_at)
+        document.getElementById("updated").textContent =
+          "עודכן לאחרונה: " + new Date(meta.val().generated_at).toLocaleString("he-IL");
+    } catch (e) {}
+    render();
+  }
+
+  loadAll().catch(err => {
+    document.getElementById("list").innerHTML =
+      `<div class="empty-state"><p>שגיאה בטעינת הנתונים. רענן את הדף.</p></div>`;
+    console.error(err);
+  });
+</script>
 </body>
 </html>
