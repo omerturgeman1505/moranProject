@@ -788,6 +788,10 @@ HOT_PROFILE_SIGNALS = {
     "medical_domain": [
         "medical device", "medical devices", "medical engineering",
         "biomedical", "physiologic", "physiological", "מכשור רפואי", "הנדסה רפואית",
+        "iso 13485", "design control", "clinical", "implant", "catheter",
+        "surgical", "patient monitoring", "diagnostics",
+        "ציוד רפואי", "אביזר רפואי", "שתלים", "קליני", "קלינית",
+        "הנדסה ביו רפואית", "הנדסה ביו-רפואית", "הנדסה ביורפואית",
     ],
     "mechanical_design": [
         "solidworks", "cad", "mechanical design", "3d printing",
@@ -1008,6 +1012,10 @@ def _public_job_payload(job: StoredJob, fit_category: str, fit_reason: str) -> d
     detail_text = job.requirements or job.description or ""
     summary_sections = parse_job_summary(detail_text).to_dict()
     fit_details = evaluate_fit(detail_text)
+    searchable = " ".join([job.title, job.company, detail_text]).lower()
+    is_biomedical = any(
+        term in searchable for term in HOT_PROFILE_SIGNALS["medical_domain"]
+    )
     payload = {
         "title": job.title,
         "company": job.company,
@@ -1018,6 +1026,7 @@ def _public_job_payload(job: StoredJob, fit_category: str, fit_reason: str) -> d
         "matched_terms": job.matched_terms,
         "alive_status": job.alive_status,
         "is_hot": job.is_hot and fit_category == "fit",
+        "is_biomedical": is_biomedical,
         "hot_terms": job.hot_terms,
         "requirements": detail_text,
         "summary_sections": summary_sections,
@@ -1854,6 +1863,7 @@ def build_public_jobs_from_state(
             not bool(j.get("is_new")),
             j.get("fit_category") != "fit",
             not bool(j.get("is_hot")),
+            not bool(j.get("is_biomedical")),
             str(j.get("last_seen_at", "")),
         ),
     )

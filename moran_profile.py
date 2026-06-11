@@ -17,6 +17,26 @@ EXTRA_LINKEDIN_KEYWORDS = [
     "מהנדסת מכונות",
     "מהנדס פיתוח",
     "מהנדסת פיתוח",
+    # Biomedical-focused searches
+    "Biomedical R&D Engineer",
+    "R&D Engineer Medical Device",
+    "Junior Biomedical Engineer",
+    "Clinical Engineer",
+    "Quality Engineer Medical Device",
+    "V&V Engineer",
+    "Verification and Validation Engineer",
+    "Product Engineer Medical Device",
+    "Field Service Engineer Medical Device",
+    "Biomedical Equipment Technician",
+    "Medical Device Assembler Engineer",
+    "מהנדס ביו רפואי",
+    "מהנדסת ביו רפואית",
+    "הנדסה ביו רפואית",
+    "הנדסה רפואית",
+    "מהנדס ולידציה",
+    "מהנדסת ולידציה",
+    "מהנדס איכות מכשור רפואי",
+    "מהנדסת איכות מכשור רפואי",
 ]
 
 EXTRA_TARGET_ROLES = [
@@ -33,6 +53,19 @@ EXTRA_TARGET_ROLES = [
     "Application Engineer",
     "מהנדס פיתוח",
     "מהנדסת פיתוח",
+    # Biomedical-focused roles
+    "Biomedical R&D Engineer",
+    "Clinical Engineer",
+    "V&V Engineer",
+    "Verification Engineer",
+    "Quality Engineer",
+    "Field Service Engineer",
+    "מהנדס ביו רפואי",
+    "מהנדסת ביו רפואית",
+    "מהנדס רפואי",
+    "מהנדסת רפואית",
+    "מהנדס ולידציה",
+    "מהנדסת ולידציה",
 ]
 
 EXTRA_KEYWORDS = [
@@ -44,6 +77,13 @@ EXTRA_KEYWORDS = [
     "toc analyzer", "ionex", "wintercell", "dot systems", "dot system",
     "twin", "water saving", "large scale cell culture", "calibration",
     "calibrated", "iud", "inserter", "removal device", "afeka",
+    # Biomedical / medical device domain
+    "v&v", "verification and validation", "design verification",
+    "iso 13485", "fda", "ce mark", "mdr", "design control",
+    "clinical", "implant", "implants", "catheter", "surgical",
+    "diagnostics", "imaging", "ultrasound", "patient monitoring",
+    "מכשור רפואי", "ציוד רפואי", "אביזר רפואי", "השתלים", "שתלים",
+    "קליני", "קלינית", "רגולציה רפואית",
 ]
 
 EXTRA_NEGATIVE_TERMS = [
@@ -68,6 +108,10 @@ HOT_PROFILE_SIGNALS = {
     "medical_domain": [
         "medical device", "medical devices", "medical engineering",
         "biomedical", "physiologic", "physiological", "מכשור רפואי", "הנדסה רפואית",
+        "iso 13485", "design control", "clinical", "implant", "catheter",
+        "surgical", "patient monitoring", "diagnostics",
+        "ציוד רפואי", "אביזר רפואי", "שתלים", "קליני", "קלינית",
+        "הנדסה ביו רפואית", "הנדסה ביו-רפואית", "הנדסה ביורפואית",
     ],
     "mechanical_design": [
         "solidworks", "cad", "mechanical design", "3d printing",
