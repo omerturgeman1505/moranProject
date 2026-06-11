@@ -205,7 +205,7 @@
     .badge-alive   { background: var(--alive-bg); color: var(--alive-tx); }
     .badge-unknown { background: var(--unk-bg); color: var(--unk-tx); }
     .badge-applied { background: var(--app-bg); color: var(--app-tx); }
-    .badge-clicked { background: var(--clk-bg); color: var(--clk-tx); }
+    .badge-clicked { background: rgba(148,163,184,0.20); color: #cbd5e1; border: 1px solid rgba(148,163,184,0.35); }
     .badge-center  { background: var(--ctr-bg); color: var(--ctr-tx); border: 1px solid var(--ctr-bd); }
     .badge-count   { background: rgba(255,255,255,0.07); color: var(--ink2); border: 1px solid var(--glass-bdr); }
 
@@ -293,6 +293,10 @@
     .job-row-meta  { font-size: 12px; color: var(--muted); margin-top: 1px; }
     .job-row-meta .dot { margin: 0 4px; opacity: .4; }
     .job-row-badges { display: flex; align-items: center; gap: 4px; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; }
+
+    /* ── Seen/clicked job row ───────────────────────────────────────────────── */
+    .job-row.seen-row .job-row-title { color: var(--ink2); }
+    .job-row.seen-row .job-row-head { border-right: 2px solid rgba(148,163,184,0.35); }
 
     /* ── Job body — slide-up open animation ─────────────────────────────────── */
     @keyframes slideUp {
@@ -398,7 +402,8 @@
       main { padding: 14px 12px 40px; }
       .stats-row { grid-template-columns: repeat(2,1fr); gap: 8px; }
       .profile-body { grid-template-columns: 1fr; }
-      .cluster-badges, .job-row-badges { display: none; }
+      .cluster-badges { display: none; }
+      .job-row-badges .badge:not(.badge-clicked) { display: none; }
       .cluster-head { padding: 12px 14px; }
       .job-row-head { padding: 10px 14px 10px 16px; }
       .job-row-body { padding: 12px 14px 16px 16px; }
@@ -636,7 +641,7 @@
     const appNote = isApplied ? `<span class="applied-note">הוגש ${fmtDate(applied[j.link])}</span>` : "";
 
     return `
-      <div class="job-row${j.is_hot?" hot-row":""}" role="listitem">
+      <div class="job-row${j.is_hot?" hot-row":""}${clicked[j.link]?" seen-row":""}" role="listitem">
         <div class="job-row-head" data-toggle="${sl}" tabindex="0" role="button"
              aria-expanded="false" aria-label="${esc(j.title)}">
           ${CHEV}
@@ -664,13 +669,15 @@
     const fitCnt = jobs.filter(j=>(j.fit_category||"fit")==="fit").length;
     const hotCnt = jobs.filter(j=>j.is_hot).length;
     const newCnt = jobs.filter(j=>j.is_new).length;
-    const isOpen = openCompanies.has(company) || jobs.length===1;
+    const clkCnt = jobs.filter(j=>clicked[j.link]).length;
+    const isOpen = openCompanies.has(company);
     const locs   = [...new Set(jobs.map(j=>j.location).filter(Boolean))].slice(0,3).join(" · ");
     const ctrB   = hasCtr ? `<span class="badge badge-center">📍 מרכז</span>` : "";
     const cntB   = `<span class="badge badge-count">${jobs.length} משרות</span>`;
     const fitB   = fitCnt ? `<span class="badge badge-fit">✦ ${fitCnt} מתאימות</span>` : "";
     const hotB   = hotCnt ? `<span class="badge badge-hot">🔥 ${hotCnt}</span>` : "";
     const newB   = newCnt ? `<span class="badge badge-new">${newCnt}</span>` : "";
+    const clkB   = clkCnt ? `<span class="badge badge-clicked">👁 ${clkCnt} נצפו</span>` : "";
     return `
       <div class="cluster${hasHot?" has-hot":""}${isOpen?" open":""}" role="listitem">
         <div class="cluster-head" data-company="${esc(company)}" tabindex="0" role="button"
@@ -680,7 +687,7 @@
             <div class="cluster-name">${esc(company)}</div>
             <div class="cluster-sub">${esc(locs)}</div>
           </div>
-          <div class="cluster-badges">${ctrB}${cntB}${fitB}${hotB}${newB}</div>
+          <div class="cluster-badges">${ctrB}${cntB}${fitB}${hotB}${newB}${clkB}</div>
         </div>
         <div class="cluster-jobs">${jobs.map(renderJobRow).join("")}</div>
       </div>`;
