@@ -37,6 +37,39 @@ EXTRA_LINKEDIN_KEYWORDS = [
     "מהנדסת ולידציה",
     "מהנדס איכות מכשור רפואי",
     "מהנדסת איכות מכשור רפואי",
+    # Cell culture / bioprocess (Moran's lab background)
+    "Cell Culture Technician",
+    "Cell Culture Engineer",
+    "Upstream Process Development Engineer",
+    "Downstream Process Development",
+    "Bioprocess Development Engineer",
+    "Bioreactor Technician",
+    "Lab Technician Cell Culture",
+    "R&D Technician Bioprocess",
+    "Cultivated Meat Engineer",
+    "Food Tech Engineer Israel",
+    # Process / production engineering
+    "Process Development Engineer Medical Device",
+    "Process Validation Engineer",
+    "Manufacturing Process Engineer",
+    "Production Engineer Medical Device",
+    "Quality Assurance Engineer Medical Device",
+    "Regulatory Affairs Engineer Israel",
+    # More Hebrew searches
+    "מהנדס תהליך",
+    "מהנדסת תהליך",
+    "מהנדס ייצור",
+    "מהנדסת ייצור",
+    "מהנדס איכות",
+    "מהנדסת איכות",
+    "מהנדס מערכות",
+    "מהנדסת מערכות",
+    "טכנאי מעבדה",
+    "טכנאית מעבדה",
+    "תרביות תאים",
+    "ביוריאקטור",
+    "מהנדס אינטגרציה",
+    "מהנדסת אינטגרציה",
 ]
 
 EXTRA_TARGET_ROLES = [
@@ -84,6 +117,19 @@ EXTRA_KEYWORDS = [
     "diagnostics", "imaging", "ultrasound", "patient monitoring",
     "מכשור רפואי", "ציוד רפואי", "אביזר רפואי", "השתלים", "שתלים",
     "קליני", "קלינית", "רגולציה רפואית",
+    # Cell culture / bioprocess / cultivated meat
+    "upstream", "downstream", "upstream process", "downstream process",
+    "cell line", "cell lines", "mammalian cell", "cho cells",
+    "perfusion", "fed-batch", "batch culture", "scale-up",
+    "cultivated meat", "alt protein", "alternative protein",
+    "fermentation", "fermentor", "fermenter", "upstream bioreactor",
+    "תרביות תאים", "ביוריאקטור", "ביוריאקטורים", "קנה מידה",
+    "בשר מתורבת", "חלבון חלופי",
+    # Mechanical / IVD / lab instruments
+    "gage", "gauge", "gmp", "gmp compliance",
+    "design history file", "dhf", "risk management", "iso 14971",
+    "usability", "human factors", "test protocol",
+    "assembly", "jig", "fixture", "pump", "flow control",
 ]
 
 EXTRA_NEGATIVE_TERMS = [
@@ -124,14 +170,24 @@ HOT_PROFILE_SIGNALS = {
         "flexcell", "trubio", "cellaca", "cedex", "mfcs", "masterflex",
         "dot system", "dot systems", "twin", "large scale cell culture",
         "calibration", "calibrated",
+        # Cell culture / upstream/downstream
+        "upstream", "downstream", "scale-up", "fed-batch", "perfusion",
+        "cell line", "mammalian cell", "cho", "fermentation", "fermenter",
+        "cultivated meat", "alt protein", "alternative protein",
+        "תרביות תאים", "ביוריאקטור", "ביוריאקטורים", "בשר מתורבת",
     ],
     "process_data": [
         "process optimization", "process engineer", "validation", "sop",
         "work instructions", "data analysis",
+        "gmp", "gmp compliance", "risk management", "iso 14971",
+        "test protocol", "dhf", "design history file",
+        "process development", "scale up", "process transfer",
     ],
     "systems_integration": [
         "system integration", "machine systems", "custom machine",
         "troubleshooting", "maintenance", "lab equipment", "reliability", "repeatability",
+        "assembly", "jig", "fixture", "pump", "flow control",
+        "mechanical assembly", "electromechanical",
     ],
 }
 
@@ -150,6 +206,9 @@ def apply_moran_profile(platform_module) -> None:
     _extend_unique(platform_module.TARGET_ROLES, EXTRA_TARGET_ROLES)
     _extend_unique(platform_module.KEYWORDS, EXTRA_KEYWORDS)
     _extend_unique(platform_module.NEGATIVE_TERMS, EXTRA_NEGATIVE_TERMS)
+    # Extend AllJobs keyword list when available
+    if hasattr(platform_module, "ALLJOBS_KEYWORDS"):
+        _extend_unique(platform_module.ALLJOBS_KEYWORDS, EXTRA_LINKEDIN_KEYWORDS)
     _extend_unique(
         platform_module.MED_ENG_FIELDS,
         ["medical engineer", "biomedical engineer", "הנדסה ביו רפואית"],

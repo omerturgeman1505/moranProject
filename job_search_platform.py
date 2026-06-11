@@ -91,7 +91,14 @@ LINKEDIN_KEYWORDS = [
 # Israeli companies with public Greenhouse boards, fetched via the structured
 # JSON API (boards-api.greenhouse.io). A mix of medtech / biotech / hardware.
 GREENHOUSE_COMPANIES = [
-    "medtronic", "insightec", "nanox", "evogene", "pluri",
+    "medtronic",    # Global medtech leader, large Israel R&D center
+    "insightec",    # Focused ultrasound / therapeutic ultrasound
+    "nanox",        # Nano-X Imaging — medical X-ray
+    "evogene",      # Plant biotech / genomics
+    "pluri",        # Stem cell / cell therapy (Rehovot)
+    "collplant",    # Regenerative medicine / bioprinting
+    "lumenis",      # Medical lasers
+    "rapidmedical", # Neurovascular devices
 ]
 
 # Optional dynamic-render boards (Comeet/Workday) handled via Playwright when
@@ -177,7 +184,7 @@ NEGATIVE_TERMS = [
     "unity", "unreal", "vr", "machine learning", "big data", "cloud",
     "wireless", "silicon", "soc", "mac layer", "bluetooth", "ble", "firmware",
     "signal processing", "software engineer", "software engineering",
-    "algorithm development",
+    "algorithm development", "data scientist", "data science",
     "production worker", "manual dexterity", "production optics employee",
     "סימולטור", "סימולטורים", "סימולציה", "סימולציות", "מנועים גרפיים",
     "למידת מכונה", "מציאות מדומה",
@@ -218,12 +225,13 @@ LINKEDIN_GUEST_URL = (
     "https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search"
 )
 LINKEDIN_PAST_MONTH = "r2592000"   # f_TPR value = last 30 days (in seconds)
-LINKEDIN_PAGES = 4                 # 25 results each → up to 100 per keyword
+LINKEDIN_PAGES = 5                 # 25 results each → up to 125 per keyword
 REQUEST_DELAY_S = 1.5              # Polite delay between requests (avoid 429s)
 SEEN_JSON_PATH = "jobs_seen.json"  # Lightweight dedup store (per spec)
 JOB_RETENTION_DAYS = 7             # Drop old non-applied dashboard jobs.
 
 CAREER_PAGES = [
+    # ── Existing ──────────────────────────────────────────────────────────────
     {
         "company": "Admetec",
         "url": "https://www.admetec.com/careers/",
@@ -263,6 +271,114 @@ CAREER_PAGES = [
         "company": "Alpha Omega",
         "url": "https://www.alphaomega-eng.com/Israel",
         "domain": "Medical Device",
+    },
+    # ── Cultivated Meat / Cell Culture / Bioprocess ───────────────────────────
+    # Directly relevant to Moran's bioreactor + large-scale cell culture experience
+    {
+        "company": "Aleph Farms",
+        "url": "https://aleph-farms.com/jobs/",
+        "domain": "Cultivated Meat / Cell Culture / Bioprocess",
+    },
+    {
+        "company": "Believer Meats",
+        "url": "https://believermeats.com/careers/",
+        "domain": "Cultivated Meat / Cell Culture / Bioreactor",
+    },
+    {
+        "company": "SuperMeat",
+        "url": "https://supermeat.com/careers/",
+        "domain": "Cultivated Meat / Cell Culture",
+    },
+    {
+        "company": "Remilk",
+        "url": "https://remilk.com/careers",
+        "domain": "Precision Fermentation / Bioprocess",
+    },
+    {
+        "company": "Forsea Foods",
+        "url": "https://www.forsea.co/careers/",
+        "domain": "Cultivated Seafood / Cell Culture",
+    },
+    {
+        "company": "Steakholder Foods",
+        "url": "https://www.steakholder.com/careers",
+        "domain": "Cultivated Meat / 3D Bioprinting",
+    },
+    {
+        "company": "BioBetter",
+        "url": "https://biobetter.com/careers/",
+        "domain": "Agri-Biotech / Plant-based Biologics",
+    },
+    # ── Medical Device / MedTech ──────────────────────────────────────────────
+    {
+        "company": "Lumenis",
+        "url": "https://www.lumenis.com/company/careers/",
+        "domain": "Medical Laser / Medical Device",
+    },
+    {
+        "company": "CollPlant",
+        "url": "https://www.collplant.com/company/careers/",
+        "domain": "Regenerative Medicine / Bioprinting / Medical Device",
+    },
+    {
+        "company": "Rapid Medical",
+        "url": "https://www.rapid-medical.com/careers/",
+        "domain": "Neurovascular Medical Device",
+    },
+    {
+        "company": "BrainsWay",
+        "url": "https://www.brainsway.com/careers/",
+        "domain": "Neurostimulation / Medical Device",
+    },
+    {
+        "company": "Microbot Medical",
+        "url": "https://microbotmedical.com/careers/",
+        "domain": "Surgical Robotics / Medical Device",
+    },
+    {
+        "company": "Medinol",
+        "url": "https://www.medinol.com/careers/",
+        "domain": "Cardiovascular / Coronary Medical Device",
+    },
+    {
+        "company": "Todos Medical",
+        "url": "https://www.todosmedical.com/careers/",
+        "domain": "Medical Diagnostics / Medical Device",
+    },
+    {
+        "company": "Oramed Pharmaceuticals",
+        "url": "https://www.oramed.com/careers/",
+        "domain": "Oral Drug Delivery / Pharmaceutical",
+    },
+    {
+        "company": "Nano Dimension",
+        "url": "https://www.nano-di.com/careers",
+        "domain": "3D Printing / Electronics / Medtech",
+    },
+    {
+        "company": "InVivo Therapeutics",
+        "url": "https://www.invivotherapeutics.com/careers/",
+        "domain": "Spinal Cord / Biomaterials / Medical Device",
+    },
+    {
+        "company": "Itamar Medical",
+        "url": "https://jobs.lever.co/itamarmedical",
+        "domain": "Cardiovascular Diagnostics / Medical Device",
+    },
+    {
+        "company": "Nucleai",
+        "url": "https://nucleai.ai/careers/",
+        "domain": "AI Pathology / Medical Device / Biomedical",
+    },
+    {
+        "company": "PhotoSmart",
+        "url": "https://www.photosmartmed.com/careers",
+        "domain": "Photoacoustic Imaging / Medical Device",
+    },
+    {
+        "company": "OR-Nim Medical",
+        "url": "https://www.or-nim.com/careers/",
+        "domain": "Non-invasive Monitoring / Medical Device",
     },
 ]
 
@@ -373,26 +489,53 @@ def publish_scan_status(
 # Rotated to look like distinct real browser sessions and dodge naive 403 blocks.
 USER_AGENTS = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
     "(KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 "
-    "(KHTML, like Gecko) Version/17.4 Safari/605.1.15",
+    "(KHTML, like Gecko) Version/17.5 Safari/605.1.15",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:127.0) Gecko/20100101 Firefox/127.0",
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:126.0) Gecko/20100101 Firefox/126.0",
     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
-    "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+    "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0",
 ]
-ACCEPT_LANGUAGES = ["en-US,en;q=0.9,he;q=0.8", "he-IL,he;q=0.9,en-US;q=0.8,en;q=0.7"]
+ACCEPT_LANGUAGES = [
+    "en-US,en;q=0.9,he;q=0.8",
+    "he-IL,he;q=0.9,en-US;q=0.8,en;q=0.7",
+    "en-GB,en;q=0.9,he;q=0.8",
+    "he,en-US;q=0.9,en;q=0.8",
+]
 
 
 def _random_headers(referer: str = "https://www.google.com/") -> dict[str, str]:
     """A realistic, randomized browser-session header set."""
-    return {
-        "User-Agent": random.choice(USER_AGENTS),
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    ua = random.choice(USER_AGENTS)
+    headers: dict[str, str] = {
+        "User-Agent": ua,
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
         "Accept-Language": random.choice(ACCEPT_LANGUAGES),
+        "Accept-Encoding": "gzip, deflate, br",
         "Referer": referer,
         "Connection": "keep-alive",
         "Upgrade-Insecure-Requests": "1",
+        "Sec-Fetch-Dest": "document",
+        "Sec-Fetch-Mode": "navigate",
+        "Sec-Fetch-Site": "same-origin" if referer and "linkedin" in referer else "cross-site",
+        "Sec-Fetch-User": "?1",
+        "Cache-Control": "max-age=0",
+        "DNT": "1",
     }
+    # Add Chrome-specific hint headers when using a Chrome UA
+    if "Chrome/" in ua and "Edg/" not in ua:
+        ver = ua.split("Chrome/")[1].split(".")[0]
+        headers["sec-ch-ua"] = f'"Chromium";v="{ver}", "Google Chrome";v="{ver}", "Not_A Brand";v="8"'
+        headers["sec-ch-ua-mobile"] = "?0"
+        headers["sec-ch-ua-platform"] = '"Windows"' if "Windows" in ua else '"macOS"'
+    return headers
 
 
 # Backwards-compatible default (used by liveness checker / tests).
@@ -1067,7 +1210,7 @@ def _public_job_payload(job: StoredJob, fit_category: str, fit_reason: str) -> d
 # Direct web scraping — fetch & parse raw HTML straight from the job boards
 # ---------------------------------------------------------------------------
 
-def _fetch_html(url: str, referer: str, timeout: int, retries: int = 2) -> str | None:
+def _fetch_html(url: str, referer: str, timeout: int, retries: int = 3) -> str | None:
     """GET a URL with rotating browser headers and simple retry/backoff."""
     for attempt in range(retries + 1):
         try:
@@ -1076,12 +1219,17 @@ def _fetch_html(url: str, referer: str, timeout: int, retries: int = 2) -> str |
             )
             if resp.status_code == 200:
                 return resp.text
-            if resp.status_code in (429, 403):
-                # Rate-limited / soft-blocked: back off and retry with new headers.
-                time.sleep(REQUEST_DELAY_S * (attempt + 2))
+            if resp.status_code in (429, 403, 999):
+                # Rate-limited / soft-blocked: exponential back-off with new headers.
+                wait = REQUEST_DELAY_S * (2 ** (attempt + 1))
+                logging.debug("HTTP %d for %s — waiting %.1fs", resp.status_code, url, wait)
+                time.sleep(wait)
                 continue
+            if resp.status_code in (404, 410):
+                return None  # Permanent — don't retry
             return None
-        except requests.RequestException:
+        except requests.RequestException as exc:
+            logging.debug("Request error for %s: %s", url, exc)
             time.sleep(REQUEST_DELAY_S * (attempt + 1))
     return None
 
@@ -1103,6 +1251,117 @@ def _is_job_posting_url(url: str) -> bool:
     return True
 
 
+# ---------------------------------------------------------------------------
+# AllJobs.co.il — Israel's largest job board
+# ---------------------------------------------------------------------------
+
+# Hebrew-first keywords targeting Moran's profile on Israeli jobs
+ALLJOBS_KEYWORDS = [
+    "מהנדס ביו רפואי",
+    "מהנדסת ביו רפואית",
+    "מכשור רפואי",
+    "הנדסה ביו רפואית",
+    "מהנדס ולידציה",
+    "מהנדסת ולידציה",
+    "מהנדס פיתוח",
+    "מהנדסת פיתוח",
+    "מהנדס מכונות",
+    "מהנדסת מכונות",
+    "מהנדס תהליך",
+    "מהנדסת תהליך",
+    "biomedical engineer",
+    "medical device engineer",
+    "validation engineer",
+    "cell culture engineer",
+    "bioreactor engineer",
+    "r&d engineer medical",
+    "junior engineer biomedical",
+]
+
+
+def _parse_alljobs(html: str, source_url: str) -> list[Job]:
+    """Extract job postings from an AllJobs.co.il search results page."""
+    soup = BeautifulSoup(html, "html.parser")
+    jobs: list[Job] = []
+    seen_links: set[str] = set()
+
+    # AllJobs job-detail links contain JobID query param or /SeoJobSingle
+    link_candidates = soup.select(
+        "a[href*='JobID='], a[href*='SeoJobSingle'], a[href*='/jobs/view/']"
+    )
+    for link_el in link_candidates:
+        href = link_el.get("href", "")
+        if not href:
+            continue
+        link = urljoin("https://www.alljobs.co.il", href)
+        if link in seen_links:
+            continue
+        seen_links.add(link)
+
+        # Title: link text or nearest heading
+        title = _clean(link_el.get_text(" "))
+        parent_card = link_el.find_parent(["div", "li", "article", "tr"]) or link_el.parent
+        if not title or len(title) < 5:
+            if parent_card:
+                heading = parent_card.select_one(
+                    "h2, h3, h4, [class*='title'], [class*='position'], [class*='job-name']"
+                )
+                if heading:
+                    title = _clean(heading.get_text(" "))
+        if not title or not _looks_like_job_title(title):
+            continue
+
+        company = "Unknown"
+        location = "Israel"
+        if parent_card:
+            co_el = parent_card.select_one(
+                "[class*='company'], [class*='employer'], [class*='workplace'], [class*='מעסיק']"
+            )
+            loc_el = parent_card.select_one(
+                "[class*='location'], [class*='city'], [class*='area'], [class*='עיר']"
+            )
+            if co_el:
+                company = _clean(co_el.get_text(" ")) or "Unknown"
+            if loc_el:
+                location = _clean(loc_el.get_text(" ")) or "Israel"
+
+        description = title
+        if parent_card:
+            desc_text = _clean(parent_card.get_text(" "))
+            if len(desc_text) > len(title):
+                description = desc_text[:700]
+
+        jobs.append(Job(
+            title=title,
+            company=company,
+            location=location,
+            link=link,
+            source="AllJobs",
+            description=description,
+        ))
+    return jobs
+
+
+def search_alljobs(config: Config) -> list[Job]:
+    """Scrape AllJobs.co.il — Israel's largest job board (Hebrew + English)."""
+    jobs: list[Job] = []
+    for keyword in ALLJOBS_KEYWORDS:
+        url = (
+            "https://www.alljobs.co.il/SearchResultsGuest.aspx"
+            f"?Query={quote_plus(keyword)}&Position=1"
+        )
+        html = _fetch_html(url, "https://www.alljobs.co.il/", config.request_timeout_seconds)
+        if not html:
+            time.sleep(REQUEST_DELAY_S)
+            continue
+        page_jobs = _parse_alljobs(html, url)
+        jobs.extend(page_jobs)
+        if page_jobs:
+            logging.info("AllJobs '%s' → %d postings", keyword, len(page_jobs))
+        time.sleep(REQUEST_DELAY_S)
+    return jobs
+
+
 def scrape_all(config: Config) -> list[Job]:
     """Run every direct-scrape source and return de-duplicated jobs."""
     jobs: list[Job] = []
@@ -1110,7 +1369,9 @@ def scrape_all(config: Config) -> list[Job]:
     jobs.extend(search_greenhouse(config))
     jobs.extend(search_career_pages(config))
     jobs.extend(search_dynamic_boards(config))
-    jobs = [j for j in jobs if j.source == "Career Page" or _is_job_posting_url(j.link)]
+    jobs.extend(search_alljobs(config))
+    PASS_THROUGH_SOURCES = {"Career Page", "AllJobs"}
+    jobs = [j for j in jobs if j.source in PASS_THROUGH_SOURCES or _is_job_posting_url(j.link)]
     unique = _dedupe(jobs)
     logging.info("Scraped %d raw / %d unique postings.", len(jobs), len(unique))
     return unique
@@ -1156,16 +1417,26 @@ def _parse_linkedin(html: str) -> list[Job]:
             "h4.base-search-card__subtitle a, h4.base-search-card__subtitle, h4"
         )
         location_el = card.select_one(".job-search-card__location")
+        # Try to get a snippet/description from card metadata or benefit tags
+        snippet_el = card.select_one(
+            ".base-search-card__snippet, .job-search-card__snippet, "
+            ".job-search-card__benefits-list, .base-search-card__metadata"
+        )
         link = link_el.get("href", "").split("?")[0]
         if not link:
             continue
+        title_text = _clean(title_el.get_text(" "))
+        company_text = _clean(company_el.get_text(" ")) if company_el else "Unknown"
+        snippet_text = _clean(snippet_el.get_text(" ")) if snippet_el else ""
+        # Build description from title + company + snippet so keyword matching has more signal
+        description = " | ".join(filter(None, [title_text, company_text, snippet_text]))
         jobs.append(Job(
-            title=_clean(title_el.get_text(" ")),
-            company=_clean(company_el.get_text(" ")) if company_el else "Unknown",
+            title=title_text,
+            company=company_text,
             location=_clean(location_el.get_text(" ")) if location_el else "Israel",
             link=link,
             source="LinkedIn",
-            description=_clean(title_el.get_text(" ")),
+            description=description,
         ))
     return jobs
 
@@ -1291,8 +1562,10 @@ def _looks_like_job_title(text: str) -> bool:
         "engineer", "technician", "operator", "specialist", "associate",
         "validation", "quality", "regulatory", "process", "production",
         "mechanical", "biomedical", "medical device", "r&d", "lab",
+        "scientist", "researcher", "biologist", "analyst", "developer",
+        "cell culture", "bioprocess", "bioreactor", "upstream", "downstream",
         "מהנדס", "מהנדסת", "טכנאי", "טכנאית", "איכות", "ולידציה",
-        "ייצור", "תהליך", "מעבדה",
+        "ייצור", "תהליך", "מעבדה", "חוקר", "חוקרת", "מדען", "מדענית",
     ]
     return any(term in low for term in title_terms)
 
