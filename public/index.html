@@ -5,264 +5,216 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>חיפוש משרות — מורן</title>
   <style>
-    /* ── Design tokens ─────────────────────────────────────────────────────── */
+    /* ── Dark glass design tokens ───────────────────────────────────────────── */
     :root {
-      --bg:        #f0f4f9;
-      --surface:   #ffffff;
-      --border:    #dde3ed;
-      --border-lt: #edf1f7;
-      --ink:       #0d1b2e;
-      --ink2:      #374151;
-      --muted:     #6b7a99;
-      --accent:    #2563eb;
-      --accent-dk: #1d4ed8;
-      --accent-lt: #eff4ff;
-      --hot-bg:    #fff7ed;
-      --hot-bd:    #fb923c;
-      --hot-tx:    #9a3412;
-      --new-bg:    #2563eb;
-      --new-tx:    #ffffff;
-      --fit-bg:    #ecfdf5;
-      --fit-bd:    #6ee7b7;
-      --fit-tx:    #065f46;
-      --ai-bg:     #f5f3ff;
-      --ai-bd:     #c4b5fd;
-      --ai-tx:     #5b21b6;
-      --alive-bg:  #dcfce7;
-      --alive-tx:  #166534;
-      --unk-bg:    #fefce8;
-      --unk-tx:    #854d0e;
-      --app-bg:    #dbeafe;
-      --app-tx:    #1e40af;
-      --clk-bg:    #f1f5f9;
-      --clk-tx:    #475569;
-      --ctr-bg:    #f0fdf4;
-      --ctr-bd:    #86efac;
-      --ctr-tx:    #166534;
-      --radius:    12px;
-      --radius-sm: 8px;
+      --glass:      rgba(255,255,255,0.055);
+      --glass-h:    rgba(255,255,255,0.085);
+      --glass-a:    rgba(255,255,255,0.10);
+      --glass-bdr:  rgba(255,255,255,0.11);
+      --glass-lt:   rgba(255,255,255,0.055);
+      --blur:        blur(16px) saturate(160%);
+      --ink:        #dde6f5;
+      --ink2:       #a8b8d0;
+      --muted:      #60728a;
+      --accent:     #60a5fa;
+      --accent-dk:  #3b82f6;
+      --accent-lt:  rgba(96,165,250,0.18);
+      --hot-bg:     rgba(251,146,60,0.12);
+      --hot-bd:     rgba(251,146,60,0.38);
+      --hot-tx:     #fb923c;
+      --fit-bg:     rgba(52,211,153,0.10);
+      --fit-bd:     rgba(52,211,153,0.32);
+      --fit-tx:     #34d399;
+      --ai-bg:      rgba(167,139,250,0.12);
+      --ai-bd:      rgba(167,139,250,0.32);
+      --ai-tx:      #a78bfa;
+      --new-bg:     #2563eb;
+      --new-tx:     #fff;
+      --alive-bg:   rgba(52,211,153,0.12);
+      --alive-tx:   #34d399;
+      --unk-bg:     rgba(251,191,36,0.10);
+      --unk-tx:     #fbbf24;
+      --app-bg:     rgba(96,165,250,0.14);
+      --app-tx:     #93c5fd;
+      --clk-bg:     rgba(148,163,184,0.10);
+      --clk-tx:     #94a3b8;
+      --ctr-bg:     rgba(52,211,153,0.10);
+      --ctr-bd:     rgba(52,211,153,0.30);
+      --ctr-tx:     #6ee7b7;
+      --radius:     14px;
+      --radius-sm:  9px;
       --radius-pill: 999px;
-      --shadow:    0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.05);
-      --shadow-md: 0 4px 12px rgba(0,0,0,.09), 0 2px 4px rgba(0,0,0,.05);
-      --trans:     .18s ease;
+      --shadow:     0 4px 24px rgba(0,0,0,.45), 0 1px 4px rgba(0,0,0,.3);
+      --shadow-md:  0 8px 36px rgba(0,0,0,.55), 0 2px 10px rgba(0,0,0,.3);
+      --trans:      .17s ease;
     }
 
-    /* ── Reset & base ───────────────────────────────────────────────────────── */
+    /* ── Base ───────────────────────────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
       margin: 0;
       font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
-      background: var(--bg);
       color: var(--ink);
       font-size: 15px;
       line-height: 1.55;
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse at 15% 25%, rgba(37,99,235,0.13) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 75%, rgba(124,58,237,0.09) 0%, transparent 55%),
+        radial-gradient(ellipse at 50% 50%, rgba(15,30,60,0.6) 0%, transparent 80%),
+        linear-gradient(155deg, #06101e 0%, #0c1829 55%, #080f1c 100%);
+      background-attachment: fixed;
     }
     a { color: inherit; }
     button, .btn { font-family: inherit; }
 
     /* ── Header ─────────────────────────────────────────────────────────────── */
     .site-header {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 18px 28px 16px;
+      background: rgba(6,16,30,0.72);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      border-bottom: 1px solid var(--glass-bdr);
+      padding: 16px 28px;
       position: sticky;
       top: 0;
       z-index: 100;
-      box-shadow: var(--shadow);
+      box-shadow: 0 2px 20px rgba(0,0,0,.4);
     }
     .header-inner {
       max-width: 1160px;
       margin: 0 auto;
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
       flex-wrap: wrap;
     }
     .header-logo {
-      width: 44px; height: 44px;
+      width: 42px; height: 42px;
       background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
-      border-radius: 12px;
+      border-radius: 11px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 22px;
+      font-size: 20px;
       flex-shrink: 0;
+      box-shadow: 0 0 18px rgba(37,99,235,0.4);
     }
     .header-text { flex: 1; min-width: 0; }
-    .header-text h1 {
-      margin: 0 0 2px;
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--ink);
-    }
-    .header-text .subtitle {
-      margin: 0;
-      font-size: 13px;
-      color: var(--muted);
-    }
+    .header-text h1 { margin: 0 0 2px; font-size: 19px; font-weight: 700; }
+    .header-text .subtitle { margin: 0; font-size: 12.5px; color: var(--muted); }
     #mode-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      color: var(--muted);
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-pill);
-      padding: 4px 10px;
-      white-space: nowrap;
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--muted);
+      background: var(--glass); border: 1px solid var(--glass-bdr);
+      border-radius: var(--radius-pill); padding: 4px 10px; white-space: nowrap;
     }
     #mode-badge::before {
-      content: "";
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: #10b981;
-      flex-shrink: 0;
+      content: ""; width: 6px; height: 6px; border-radius: 50%;
+      background: #34d399; flex-shrink: 0;
+      box-shadow: 0 0 8px #34d399;
     }
 
-    /* ── Main layout ────────────────────────────────────────────────────────── */
-    main {
-      max-width: 1160px;
-      margin: 0 auto;
-      padding: 24px 20px 48px;
-    }
+    /* ── Main ───────────────────────────────────────────────────────────────── */
+    main { max-width: 1160px; margin: 0 auto; padding: 22px 20px 52px; }
 
-    /* ── Profile card ───────────────────────────────────────────────────────── */
-    .profile-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
+    /* ── Glass card base ────────────────────────────────────────────────────── */
+    .glass-card {
+      background: var(--glass);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      border: 1px solid var(--glass-bdr);
       border-radius: var(--radius);
-      padding: 20px 24px;
-      margin-bottom: 20px;
       box-shadow: var(--shadow);
     }
+
+    /* ── Profile ────────────────────────────────────────────────────────────── */
+    .profile-card {
+      padding: 20px 24px;
+      margin-bottom: 18px;
+    }
     .profile-card-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 14px;
+      display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
     }
-    .profile-card-header h2 {
-      margin: 0;
-      font-size: 15px;
-      font-weight: 700;
-    }
+    .profile-card-header h2 { margin: 0; font-size: 14px; font-weight: 700; }
     .profile-toggle-btn {
       margin-right: auto;
-      font-size: 12px;
-      color: var(--muted);
-      background: none;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-pill);
-      padding: 3px 10px;
-      cursor: pointer;
+      font-size: 12px; color: var(--muted);
+      background: none; border: 1px solid var(--glass-bdr);
+      border-radius: var(--radius-pill); padding: 3px 10px; cursor: pointer;
       transition: border-color var(--trans), color var(--trans);
     }
     .profile-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
-    .profile-body {
-      display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: 16px;
-    }
+    .profile-body { display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; }
     .profile-bio { font-size: 13.5px; color: var(--ink2); line-height: 1.6; margin: 0; }
     .profile-skills { display: flex; flex-wrap: wrap; gap: 6px; align-content: flex-start; }
     .skill-chip {
-      background: var(--accent-lt);
-      border: 1px solid #c7d7fd;
-      color: #1e40af;
-      border-radius: var(--radius-pill);
-      padding: 4px 10px;
-      font-size: 12px;
-      font-weight: 500;
+      background: var(--accent-lt); border: 1px solid rgba(96,165,250,0.3);
+      color: var(--accent); border-radius: var(--radius-pill);
+      padding: 4px 10px; font-size: 12px; font-weight: 500;
     }
 
-    /* ── Stats bar ──────────────────────────────────────────────────────────── */
+    /* ── Stats ──────────────────────────────────────────────────────────────── */
     .stats-row {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 10px;
-      margin-bottom: 16px;
+      display: grid; grid-template-columns: repeat(6,1fr); gap: 10px; margin-bottom: 16px;
     }
     .stat-box {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 14px 12px 12px;
-      text-align: center;
-      box-shadow: var(--shadow);
+      padding: 14px 12px 12px; text-align: center;
       transition: transform var(--trans), box-shadow var(--trans);
     }
-    .stat-box:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
-    .stat-box .stat-num { display: block; font-size: 26px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
-    .stat-box .stat-lbl { font-size: 11px; color: var(--muted); font-weight: 500; }
-    .stat-box.s-fit    .stat-num { color: #059669; }
-    .stat-box.s-review .stat-num { color: #d97706; }
-    .stat-box.s-new    .stat-num { color: var(--accent); }
-    .stat-box.s-hot    .stat-num { color: #ea580c; }
-    .stat-box.s-clicked .stat-num { color: #6b7280; }
-    .stat-box.s-applied .stat-num { color: #7c3aed; }
+    .stat-box:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .stat-num { display: block; font-size: 26px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+    .stat-lbl { font-size: 11px; color: var(--muted); font-weight: 500; }
+    .s-fit    .stat-num { color: #34d399; text-shadow: 0 0 20px rgba(52,211,153,.4); }
+    .s-review .stat-num { color: #fb923c; text-shadow: 0 0 20px rgba(251,146,60,.3); }
+    .s-new    .stat-num { color: var(--accent); text-shadow: 0 0 20px rgba(96,165,250,.4); }
+    .s-hot    .stat-num { color: #f97316; text-shadow: 0 0 20px rgba(249,115,22,.3); }
+    .s-clicked .stat-num { color: var(--ink2); }
+    .s-applied .stat-num { color: #a78bfa; text-shadow: 0 0 20px rgba(167,139,250,.3); }
 
     /* ── Filters ────────────────────────────────────────────────────────────── */
     .filters-wrap {
-      display: flex;
-      gap: 6px;
-      overflow-x: auto;
-      padding-bottom: 4px;
-      margin-bottom: 16px;
-      scrollbar-width: none;
+      display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px;
+      margin-bottom: 16px; scrollbar-width: none;
     }
     .filters-wrap::-webkit-scrollbar { display: none; }
     .filter-btn {
-      border: 1.5px solid var(--border);
-      background: var(--surface);
-      color: var(--ink2);
-      border-radius: var(--radius-pill);
-      padding: 7px 15px;
-      cursor: pointer;
-      font-size: 13.5px;
-      font-weight: 500;
+      border: 1px solid var(--glass-bdr);
+      background: var(--glass); color: var(--ink2);
+      border-radius: var(--radius-pill); padding: 7px 15px;
+      cursor: pointer; font-size: 13px; font-weight: 500;
       white-space: nowrap;
-      transition: background var(--trans), border-color var(--trans), color var(--trans);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      transition: background var(--trans), border-color var(--trans), color var(--trans), box-shadow var(--trans);
       outline: none;
     }
-    .filter-btn:focus-visible { box-shadow: 0 0 0 3px #bfdbfe; }
-    .filter-btn:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+    .filter-btn:hover:not(.active) { border-color: var(--accent); color: var(--accent); background: var(--glass-h); }
     .filter-btn.active {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: #fff;
-      box-shadow: 0 2px 6px rgba(37,99,235,.3);
+      background: rgba(37,99,235,0.35); border-color: rgba(96,165,250,0.6);
+      color: #93c5fd; box-shadow: 0 0 14px rgba(37,99,235,.25), inset 0 0 14px rgba(37,99,235,.1);
     }
 
-    /* ── Badges (shared) ────────────────────────────────────────────────────── */
+    /* ── Badges ─────────────────────────────────────────────────────────────── */
     .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-      border-radius: var(--radius-pill);
-      font-size: 11.5px;
-      font-weight: 600;
-      padding: 3px 9px;
-      white-space: nowrap;
+      display: inline-flex; align-items: center; gap: 3px;
+      border-radius: var(--radius-pill); font-size: 11px; font-weight: 600;
+      padding: 3px 8px; white-space: nowrap;
     }
-    .badge-new     { background: var(--new-bg);  color: var(--new-tx); }
-    .badge-hot     { background: #fff7ed; color: #c2410c; border: 1px solid #fdba74; }
-    .badge-fit     { background: var(--fit-bg);  color: var(--fit-tx); border: 1px solid var(--fit-bd); }
-    .badge-ai      { background: var(--ai-bg);   color: var(--ai-tx);  border: 1px solid var(--ai-bd); }
+    .badge-new     { background: rgba(37,99,235,0.7); color: #fff; }
+    .badge-hot     { background: var(--hot-bg); color: var(--hot-tx); border: 1px solid var(--hot-bd); }
+    .badge-fit     { background: var(--fit-bg); color: var(--fit-tx); border: 1px solid var(--fit-bd); }
+    .badge-ai      { background: var(--ai-bg);  color: var(--ai-tx);  border: 1px solid var(--ai-bd); }
     .badge-alive   { background: var(--alive-bg); color: var(--alive-tx); }
-    .badge-unknown { background: var(--unk-bg);  color: var(--unk-tx); }
-    .badge-applied { background: var(--app-bg);  color: var(--app-tx); }
-    .badge-clicked { background: var(--clk-bg);  color: var(--clk-tx); }
-    .badge-center  { background: var(--ctr-bg);  color: var(--ctr-tx); border: 1px solid var(--ctr-bd); font-size: 11px; }
-    .badge-count   { background: #f1f5f9; color: #334155; border: 1px solid var(--border); }
+    .badge-unknown { background: var(--unk-bg); color: var(--unk-tx); }
+    .badge-applied { background: var(--app-bg); color: var(--app-tx); }
+    .badge-clicked { background: var(--clk-bg); color: var(--clk-tx); }
+    .badge-center  { background: var(--ctr-bg); color: var(--ctr-tx); border: 1px solid var(--ctr-bd); }
+    .badge-count   { background: rgba(255,255,255,0.07); color: var(--ink2); border: 1px solid var(--glass-bdr); }
 
     /* ── Chevron ────────────────────────────────────────────────────────────── */
     .chev-box {
-      flex-shrink: 0;
-      width: 22px; height: 22px;
-      border-radius: 6px;
-      background: var(--bg);
-      border: 1px solid var(--border);
+      flex-shrink: 0; width: 22px; height: 22px; border-radius: 6px;
+      background: var(--glass-h); border: 1px solid var(--glass-bdr);
       display: flex; align-items: center; justify-content: center;
-      transition: transform var(--trans), background var(--trans);
+      transition: transform var(--trans), background var(--trans), border-color var(--trans), box-shadow var(--trans);
     }
     .chev-box svg { width: 10px; height: 10px; fill: none; stroke: var(--muted); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
 
@@ -270,209 +222,154 @@
     .clusters-list { display: flex; flex-direction: column; gap: 10px; }
 
     .cluster {
-      background: var(--surface);
-      border: 1.5px solid var(--border);
       border-radius: var(--radius);
-      box-shadow: var(--shadow);
+      border: 1px solid var(--glass-bdr);
       overflow: hidden;
-      transition: box-shadow var(--trans);
+      background: var(--glass);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      box-shadow: var(--shadow);
+      transition: box-shadow var(--trans), border-color var(--trans);
     }
     .cluster:hover { box-shadow: var(--shadow-md); }
-    .cluster.has-hot { border-color: var(--hot-bd); }
+    .cluster.has-hot { border-color: var(--hot-bd); box-shadow: 0 4px 24px rgba(251,146,60,.15); }
 
     .cluster-head {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 18px;
-      cursor: pointer;
-      user-select: none;
-      background: linear-gradient(to left, #f8faff, var(--surface));
-      border-bottom: 1.5px solid transparent;
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 18px; cursor: pointer; user-select: none;
+      background: rgba(255,255,255,0.02);
+      border-bottom: 1px solid transparent;
       transition: background var(--trans), border-color var(--trans);
     }
-    .cluster-head:hover { background: linear-gradient(to left, #eff4ff, #f8faff); }
-    .cluster-head:focus-visible { outline: 3px solid #bfdbfe; outline-offset: -3px; }
+    .cluster-head:hover { background: var(--glass-h); }
+    .cluster-head:focus-visible { outline: 2px solid rgba(96,165,250,.5); outline-offset: -2px; }
     .cluster.open .cluster-head {
-      background: linear-gradient(to left, #eff4ff, #f8faff);
-      border-bottom-color: var(--border);
+      background: var(--glass-a);
+      border-bottom-color: var(--glass-bdr);
     }
-    .cluster.open .chev-box { transform: rotate(90deg); background: var(--accent-lt); border-color: #c7d7fd; }
+    .cluster.open .chev-box {
+      transform: rotate(90deg);
+      background: var(--accent-lt);
+      border-color: rgba(96,165,250,.4);
+      box-shadow: 0 0 10px rgba(96,165,250,.2);
+    }
     .cluster.open .chev-box svg { stroke: var(--accent); }
 
     .cluster-info { flex: 1; min-width: 0; }
-    .cluster-name {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--ink);
-    }
-    .cluster-sub {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 2px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .cluster-badges {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      flex-shrink: 0;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
+    .cluster-name { font-size: 15px; font-weight: 700; color: var(--ink); }
+    .cluster-sub  { font-size: 12px; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .cluster-badges { display: flex; align-items: center; gap: 5px; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; }
 
+    /* ── Cluster jobs container ─────────────────────────────────────────────── */
     .cluster-jobs { display: none; }
     .cluster.open .cluster-jobs { display: block; }
 
-    /* ── Nested job rows ────────────────────────────────────────────────────── */
-    .job-row {
-      border-top: 1px solid var(--border-lt);
-      overflow: hidden;
-      transition: background var(--trans);
-    }
-    .job-row.hot-row { background: linear-gradient(to left, #fff9f4, transparent); }
+    /* ── Job rows ───────────────────────────────────────────────────────────── */
+    .job-row { border-top: 1px solid var(--glass-lt); overflow: hidden; }
+    .job-row.hot-row { background: linear-gradient(to left, rgba(251,146,60,.05), transparent 60%); }
 
     .job-row-head {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 18px 12px 26px; /* extra indent on the left (RTL: right) */
-      cursor: pointer;
-      user-select: none;
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 18px 11px 26px;
+      cursor: pointer; user-select: none;
       transition: background var(--trans);
     }
-    .job-row-head:hover { background: #f5f8ff; }
-    .job-row-head:focus-visible { outline: 3px solid #bfdbfe; outline-offset: -3px; }
-    .job-row.open .job-row-head { background: #f0f5ff; }
-    .job-row.open .chev-box { transform: rotate(90deg); background: var(--accent-lt); border-color: #c7d7fd; }
+    .job-row-head:hover { background: var(--glass-h); }
+    .job-row-head:focus-visible { outline: 2px solid rgba(96,165,250,.5); outline-offset: -2px; }
+    .job-row.open .job-row-head { background: var(--glass-a); }
+    .job-row.open .chev-box {
+      transform: rotate(90deg);
+      background: var(--accent-lt);
+      border-color: rgba(96,165,250,.4);
+      box-shadow: 0 0 10px rgba(96,165,250,.2);
+    }
     .job-row.open .chev-box svg { stroke: var(--accent); }
 
     .job-row-info { flex: 1; min-width: 0; }
-    .job-row-title {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--ink);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .job-row-meta {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 1px;
-    }
-    .job-row-meta .dot { margin: 0 4px; opacity: .5; }
+    .job-row-title { font-size: 14px; font-weight: 600; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .job-row-meta  { font-size: 12px; color: var(--muted); margin-top: 1px; }
+    .job-row-meta .dot { margin: 0 4px; opacity: .4; }
+    .job-row-badges { display: flex; align-items: center; gap: 4px; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; }
 
-    .job-row-badges {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      flex-shrink: 0;
-      flex-wrap: wrap;
-      justify-content: flex-end;
+    /* ── Job body — slide-up open animation ─────────────────────────────────── */
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
-
     .job-row-body {
       display: none;
-      border-top: 1px solid var(--border-lt);
+      border-top: 1px solid var(--glass-lt);
       padding: 16px 18px 18px 26px;
-      background: #fafbff;
+      background: rgba(0,0,0,.12);
     }
-    .job-row.open .job-row-body { display: block; }
+    .job-row.open .job-row-body {
+      display: block;
+      animation: slideUp .14s cubic-bezier(.22,.68,0,1) both;
+    }
 
-    /* ── Section boxes inside job body ─────────────────────────────────────── */
+    /* ── Section boxes ──────────────────────────────────────────────────────── */
     .details-grid { display: grid; gap: 10px; }
     .section-box {
-      border: 1px solid var(--border);
+      border: 1px solid var(--glass-bdr);
       border-radius: var(--radius-sm);
       overflow: hidden;
-      background: #fcfcfe;
+      background: rgba(0,0,0,.18);
     }
     .section-box h3 {
-      margin: 0;
-      padding: 9px 14px;
-      background: var(--bg);
-      border-bottom: 1px solid var(--border-lt);
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .05em;
-      color: var(--muted);
+      margin: 0; padding: 8px 14px;
+      background: rgba(255,255,255,.04);
+      border-bottom: 1px solid var(--glass-lt);
+      font-size: 10.5px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .06em; color: var(--muted);
     }
-    .section-box .section-content {
+    .section-content {
       padding: 12px 14px;
-      font-size: 13.5px;
-      line-height: 1.65;
-      color: var(--ink2);
+      font-size: 13.5px; line-height: 1.65; color: var(--ink2);
       white-space: pre-wrap;
-      max-height: 280px;
-      overflow-y: auto;
+      max-height: 280px; overflow-y: auto;
     }
-    .section-box .section-content::-webkit-scrollbar { width: 4px; }
-    .section-box .section-content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    .section-content::-webkit-scrollbar { width: 3px; }
+    .section-content::-webkit-scrollbar-thumb { background: var(--glass-bdr); border-radius: 2px; }
     .lang-tag {
-      display: inline-block;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: .05em;
-      color: var(--muted);
-      background: var(--accent-lt);
-      border-radius: 4px;
-      padding: 2px 6px;
-      margin-bottom: 5px;
-      text-transform: uppercase;
+      display: inline-block; font-size: 10px; font-weight: 700;
+      letter-spacing: .06em; color: var(--muted);
+      background: var(--accent-lt); border-radius: 4px;
+      padding: 2px 6px; margin-bottom: 5px; text-transform: uppercase;
     }
-    .lang-block + .lang-block { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border); }
+    .lang-block + .lang-block { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--glass-bdr); }
     .section-box.box-reason h3 { background: var(--fit-bg); color: var(--fit-tx); }
-    .section-box.box-reason    { border-color: var(--fit-bd); }
-    .section-box.box-ai    h3  { background: var(--ai-bg);  color: var(--ai-tx); }
-    .section-box.box-ai        { border-color: var(--ai-bd); }
+    .section-box.box-reason     { border-color: var(--fit-bd); }
+    .section-box.box-ai     h3  { background: var(--ai-bg); color: var(--ai-tx); }
+    .section-box.box-ai         { border-color: var(--ai-bd); }
 
-    /* ── Action buttons ─────────────────────────────────────────────────────── */
-    .card-actions {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      margin-top: 14px;
-      flex-wrap: wrap;
-    }
+    /* ── Buttons ────────────────────────────────────────────────────────────── */
+    .card-actions { display: flex; gap: 10px; align-items: center; margin-top: 14px; flex-wrap: wrap; }
     .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      border: none;
-      border-radius: var(--radius-sm);
-      padding: 9px 16px;
-      font-size: 13.5px;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      transition: opacity var(--trans), transform var(--trans);
+      display: inline-flex; align-items: center; gap: 6px;
+      border: none; border-radius: var(--radius-sm);
+      padding: 9px 16px; font-size: 13px; font-weight: 600;
+      cursor: pointer; text-decoration: none;
+      transition: opacity var(--trans), transform var(--trans), box-shadow var(--trans);
       outline: none;
     }
-    .btn:active { transform: scale(.97); }
-    .btn:focus-visible { box-shadow: 0 0 0 3px #bfdbfe; }
-    .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 2px 6px rgba(37,99,235,.25); }
-    .btn-primary:hover { background: var(--accent-dk); }
-    .btn-success { background: #059669; color: #fff; }
-    .btn-success:hover { background: #047857; }
-    .btn-ghost { background: var(--bg); color: var(--ink2); border: 1px solid var(--border); }
-    .btn-ghost:hover { border-color: #94a3b8; }
+    .btn:active { transform: scale(.96); }
+    .btn:focus-visible { box-shadow: 0 0 0 3px rgba(96,165,250,.4); }
+    .btn-primary { background: rgba(37,99,235,.75); color: #fff; border: 1px solid rgba(96,165,250,.4); backdrop-filter: blur(8px); }
+    .btn-primary:hover { background: rgba(37,99,235,.9); box-shadow: 0 0 16px rgba(37,99,235,.35); }
+    .btn-success { background: rgba(5,150,105,.7); color: #fff; border: 1px solid rgba(52,211,153,.35); backdrop-filter: blur(8px); }
+    .btn-success:hover { background: rgba(5,150,105,.9); box-shadow: 0 0 16px rgba(5,150,105,.3); }
+    .btn-ghost  { background: var(--glass); color: var(--ink2); border: 1px solid var(--glass-bdr); }
+    .btn-ghost:hover { background: var(--glass-h); }
     .applied-note { font-size: 12px; color: var(--muted); align-self: center; }
 
     /* ── Empty / loading ────────────────────────────────────────────────────── */
     .empty-state { text-align: center; padding: 60px 20px; color: var(--muted); }
-    .empty-state svg { width: 48px; height: 48px; margin-bottom: 12px; opacity: .35; }
+    .empty-state svg { width: 48px; height: 48px; margin-bottom: 12px; opacity: .3; }
     .empty-state p { margin: 0; font-size: 15px; }
     @keyframes shimmer { to { background-position: left; } }
     .skeleton-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      height: 60px;
-      background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+      border: 1px solid var(--glass-bdr); border-radius: var(--radius); height: 60px;
+      background: linear-gradient(90deg, rgba(255,255,255,.04) 25%, rgba(255,255,255,.08) 50%, rgba(255,255,255,.04) 75%);
       background-size: 200%;
       animation: shimmer 1.4s infinite;
     }
@@ -480,45 +377,35 @@
 
     /* ── Region divider ─────────────────────────────────────────────────────── */
     .region-divider {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin: 14px 0 8px;
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--muted);
-      letter-spacing: .05em;
-      text-transform: uppercase;
+      display: flex; align-items: center; gap: 10px;
+      margin: 14px 0 8px; font-size: 11.5px; font-weight: 700;
+      color: var(--muted); letter-spacing: .06em; text-transform: uppercase;
     }
     .region-divider::before, .region-divider::after {
-      content: "";
-      flex: 1;
-      height: 1px;
-      background: var(--border);
+      content: ""; flex: 1; height: 1px; background: var(--glass-bdr);
     }
 
     /* ── Responsive ─────────────────────────────────────────────────────────── */
     @media (max-width: 860px) {
-      .stats-row { grid-template-columns: repeat(3, 1fr); }
+      .stats-row { grid-template-columns: repeat(3,1fr); }
       .cluster-badges { max-width: 200px; }
     }
     @media (max-width: 600px) {
-      .site-header { padding: 14px 16px; }
-      main { padding: 16px 12px 40px; }
-      .stats-row { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+      .site-header { padding: 12px 14px; }
+      main { padding: 14px 12px 40px; }
+      .stats-row { grid-template-columns: repeat(2,1fr); gap: 8px; }
       .profile-body { grid-template-columns: 1fr; }
-      .cluster-badges { display: none; }
-      .job-row-badges { display: none; }
+      .cluster-badges, .job-row-badges { display: none; }
       .cluster-head { padding: 12px 14px; }
-      .job-row-head { padding: 10px 14px 10px 18px; }
-      .job-row-body { padding: 12px 14px 16px 18px; }
+      .job-row-head { padding: 10px 14px 10px 16px; }
+      .job-row-body { padding: 12px 14px 16px 16px; }
       #mode-badge { display: none; }
     }
   </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════════════════════ HEADER ══════ -->
+<!-- ══ HEADER ════════════════════════════════════════════════════════════════ -->
 <header class="site-header">
   <div class="header-inner">
     <div class="header-logo" aria-hidden="true">🔬</div>
@@ -530,13 +417,13 @@
   </div>
 </header>
 
-<!-- ═══════════════════════════════════════════════════════════ MAIN ════════ -->
+<!-- ══ MAIN ══════════════════════════════════════════════════════════════════ -->
 <main>
 
-  <!-- Profile card -->
-  <section class="profile-card">
+  <!-- Profile -->
+  <section class="glass-card profile-card">
     <div class="profile-card-header">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
       <h2>פרופיל מורן — התאמת משרות</h2>
       <button class="profile-toggle-btn" id="profile-toggle" aria-expanded="true" aria-controls="profile-body">הסתרה</button>
     </div>
@@ -569,15 +456,15 @@
 
   <!-- Stats -->
   <div class="stats-row" role="region" aria-label="סטטיסטיקות">
-    <div class="stat-box s-fit">   <span class="stat-num" id="s-total">—</span>  <span class="stat-lbl">מתאימות</span></div>
-    <div class="stat-box s-review"><span class="stat-num" id="s-review">—</span> <span class="stat-lbl">לבדיקה</span></div>
-    <div class="stat-box s-new">   <span class="stat-num" id="s-new">—</span>    <span class="stat-lbl">חדשות</span></div>
-    <div class="stat-box s-hot">   <span class="stat-num" id="s-hot">—</span>    <span class="stat-lbl">🔥 לוהטות</span></div>
-    <div class="stat-box s-clicked"><span class="stat-num" id="s-clicked">—</span><span class="stat-lbl">נלחצו</span></div>
-    <div class="stat-box s-applied"><span class="stat-num" id="s-applied">—</span><span class="stat-lbl">הגשתי</span></div>
+    <div class="glass-card stat-box s-fit">    <span class="stat-num" id="s-total">—</span>   <span class="stat-lbl">מתאימות</span></div>
+    <div class="glass-card stat-box s-review">  <span class="stat-num" id="s-review">—</span>  <span class="stat-lbl">לבדיקה</span></div>
+    <div class="glass-card stat-box s-new">     <span class="stat-num" id="s-new">—</span>     <span class="stat-lbl">חדשות</span></div>
+    <div class="glass-card stat-box s-hot">     <span class="stat-num" id="s-hot">—</span>     <span class="stat-lbl">🔥 לוהטות</span></div>
+    <div class="glass-card stat-box s-clicked"> <span class="stat-num" id="s-clicked">—</span> <span class="stat-lbl">נלחצו</span></div>
+    <div class="glass-card stat-box s-applied"> <span class="stat-num" id="s-applied">—</span> <span class="stat-lbl">הגשתי</span></div>
   </div>
 
-  <!-- Filter tabs -->
+  <!-- Filters -->
   <div class="filters-wrap" role="tablist" aria-label="סינון משרות">
     <button class="filter-btn active" data-f="fit"     role="tab" aria-selected="true">✦ מתאימות</button>
     <button class="filter-btn"        data-f="review"  role="tab">שוות בדיקה</button>
@@ -590,7 +477,7 @@
     <button class="filter-btn"        data-f="applied" role="tab">✓ הגשתי</button>
   </div>
 
-  <!-- Clustered job list -->
+  <!-- Job clusters -->
   <div class="clusters-list" id="list" role="list">
     <div class="skeleton-card"></div>
     <div class="skeleton-card"></div>
@@ -619,11 +506,11 @@
     appId: "1:745378545086:web:fc33c046d215911d140def",
     measurementId: "G-ZX02NHPLCN",
   };
-  const app = initializeApp(firebaseConfig);
-  try { getAnalytics(app); } catch (e) {}
-  const auth = getAuth(app);
+  const fbApp = initializeApp(firebaseConfig);
+  try { getAnalytics(fbApp); } catch (_) {}
+  const auth = getAuth(fbApp);
   signInAnonymously(auth).catch(e => console.warn("Anonymous auth failed", e));
-  const db = getDatabase(app);
+  const db = getDatabase(fbApp);
 
   document.getElementById("mode-badge").textContent =
     ["127.0.0.1","localhost","::1"].includes(location.hostname) ? "מקומי" : "Firebase Live";
@@ -638,23 +525,22 @@
     profileToggle.textContent = open ? "הצגה" : "הסתרה";
   });
 
-  /* ── State ──────────────────────────────────────────────────────────────── */
+  /* ── App state ──────────────────────────────────────────────────────────── */
   let allJobs = [], applied = {}, clicked = {}, filter = "fit";
-  let jobMap = new Map();            // link → job
-  const openCompanies = new Set();  // companies the user has expanded
+  let jobMap = new Map();
+  const openCompanies = new Set();
 
   /* ── Helpers ────────────────────────────────────────────────────────────── */
-  const esc = s => (s || "").replace(/[&<>"]/g,
+  const esc = s => (s||"").replace(/[&<>"]/g,
     c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-
   function jobId(link) {
     let h = 5381;
-    for (let i = 0; i < link.length; i++) h = ((h * 33) ^ link.charCodeAt(i)) >>> 0;
-    return "j" + h.toString(16);
+    for (let i = 0; i < link.length; i++) h = ((h*33)^link.charCodeAt(i))>>>0;
+    return "j"+h.toString(16);
   }
   const fmtDate = iso => { try { return new Date(iso).toLocaleDateString("he-IL"); } catch { return iso; } };
 
-  /* ── Center-district detection ──────────────────────────────────────────── */
+  /* ── Center-district ────────────────────────────────────────────────────── */
   const CENTER_LOCS = [
     "tel aviv","תל אביב","herzliya","הרצליה","petah tikva","פתח תקווה",
     "ramat gan","רמת גן","bnei brak","בני ברק","holon","חולון",
@@ -666,138 +552,124 @@
     "caesarea","קיסריה","yokneam","יקנעם","center","מרכז","sharon","שרון",
     "kiryat ono","קריית אונו","or yehuda","אור יהודה","airport city","עיר תעופה",
   ];
-  const isCenter = loc => CENTER_LOCS.some(l => (loc || "").toLowerCase().includes(l));
+  const isCenter = loc => CENTER_LOCS.some(l => (loc||"").toLowerCase().includes(l));
 
-  /* ── Grouping & sorting ─────────────────────────────────────────────────── */
+  /* ── Grouping ───────────────────────────────────────────────────────────── */
   function groupAndSort(jobs) {
     const map = new Map();
     for (const j of jobs) {
-      const co = (j.company || "Unknown").trim();
+      const co = (j.company||"Unknown").trim();
       if (!map.has(co)) map.set(co, []);
       map.get(co).push(j);
     }
-    // Sort jobs inside each company: fit > hot > new > rest
-    for (const grp of map.values()) {
-      grp.sort((a, b) => {
-        const score = j =>
-          ((j.fit_category || "fit") === "fit" ? 8 : j.fit_category === "review" ? 4 : 0)
-          + (j.is_hot ? 2 : 0) + (j.is_new ? 1 : 0);
-        return score(b) - score(a);
+    for (const grp of map.values())
+      grp.sort((a,b) => {
+        const s = j => ((j.fit_category||"fit")==="fit"?8:j.fit_category==="review"?4:0)+(j.is_hot?2:0)+(j.is_new?1:0);
+        return s(b)-s(a);
       });
-    }
-    // Sort companies: center first, then by priority
-    return [...map.entries()].sort(([, a], [, b]) => {
-      const ca = a.some(j => isCenter(j.location));
-      const cb = b.some(j => isCenter(j.location));
-      if (ca !== cb) return ca ? -1 : 1;
-      // Within same region: by max job score, then by fit count, then total
-      const topScore = grp => {
-        const s = j => ((j.fit_category || "fit") === "fit" ? 8 : j.fit_category === "review" ? 4 : 0)
-                       + (j.is_hot ? 2 : 0) + (j.is_new ? 1 : 0);
-        return Math.max(...grp.map(s));
-      };
-      const fitA = a.filter(j => (j.fit_category || "fit") === "fit").length;
-      const fitB = b.filter(j => (j.fit_category || "fit") === "fit").length;
-      return topScore(b) - topScore(a) || fitB - fitA || b.length - a.length;
+    return [...map.entries()].sort(([,a],[,b]) => {
+      const ca = a.some(j=>isCenter(j.location)), cb = b.some(j=>isCenter(j.location));
+      if (ca!==cb) return ca?-1:1;
+      const top = g => Math.max(...g.map(j=>((j.fit_category||"fit")==="fit"?8:j.fit_category==="review"?4:0)+(j.is_hot?2:0)+(j.is_new?1:0)));
+      const fa = a.filter(j=>(j.fit_category||"fit")==="fit").length;
+      const fb = b.filter(j=>(j.fit_category||"fit")==="fit").length;
+      return top(b)-top(a)||fb-fa||b.length-a.length;
     });
   }
 
   /* ── Section rendering ──────────────────────────────────────────────────── */
   const langLabel = { he: "עברית", en: "English" };
+
+  /* dir attribute fixes text direction per language block */
   const renderLangBlock = (lang, lines) => !lines?.length ? ""
-    : `<div class="lang-block"><span class="lang-tag">${langLabel[lang]}</span><div>${esc(lines.join("\n"))}</div></div>`;
+    : `<div class="lang-block" dir="${lang==="en"?"ltr":"rtl"}">`
+    + `<span class="lang-tag">${langLabel[lang]}</span>`
+    + `<div>${esc(lines.join("\n"))}</div></div>`;
 
-  const sectionBox = (title, block, cls = "") => {
+  const sectionBox = (title, block, cls="") => {
     if (!block) return "";
-    const he = block.he || [], en = block.en || [];
+    const he = block.he||[], en = block.en||[];
     if (!he.length && !en.length) return "";
-    return `<div class="section-box ${cls}"><h3>${esc(title)}</h3><div class="section-content">${renderLangBlock("he",he)}${renderLangBlock("en",en)}</div></div>`;
+    return `<div class="section-box ${cls}"><h3>${esc(title)}</h3><div class="section-content">`
+      + renderLangBlock("he",he)+renderLangBlock("en",en)+`</div></div>`;
   };
-  const textSectionBox = (title, text, cls = "") => text
-    ? `<div class="section-box ${cls}"><h3>${esc(title)}</h3><div class="section-content">${esc(text)}</div></div>` : "";
+  const textBox = (title, text, cls="", dir="rtl") => text
+    ? `<div class="section-box ${cls}"><h3>${esc(title)}</h3><div class="section-content" dir="${dir}">${esc(text)}</div></div>` : "";
 
-  function renderJobDetails(j) {
-    const detailText = j.requirements || j.description || "";
-    const sections = j.summary_sections || parseJobSummary(detailText);
-    const hasSection = key => sections[key] && ((sections[key].he||[]).length || (sections[key].en||[]).length);
-    const mainKeys = DEFAULT_SECTION_ORDER.filter(k => k !== "additional" && hasSection(k));
-    const mainSections = mainKeys.map(k => sectionBox(sectionDisplayLabel(k,"he"), sections[k])).join("");
-    const additional = hasSection("additional") ? sectionBox(sectionDisplayLabel("additional","he"), sections.additional) : "";
-    const rawFallback = !mainSections && !additional && detailText ? textSectionBox("פירוט שנמצא", detailText) : "";
-    const missing = !mainSections && !additional && !detailText
-      ? textSectionBox("פירוט המשרה", "לא הצלחתי למשוך פירוט מלא. כדאי לפתוח את עמוד המשרה המקורי.") : "";
-    const reason = j.fit_reason ? textSectionBox("✦ למה זה מתאים למורן", j.fit_reason, "box-reason") : "";
-    const aiReason = j.ai_fit_reason
-      ? textSectionBox(`✦ Gemini — ${j.ai_fit_category||"review"} (${j.ai_fit_confidence||0}%)`, j.ai_fit_reason, "box-ai") : "";
-    const terms = j.matched_terms ? textSectionBox("מילות התאמה", j.matched_terms) : "";
-    return `<div class="details-grid">${reason}${aiReason}${mainSections}${rawFallback}${terms}${additional}${missing}</div>`;
+  function renderDetails(j) {
+    const raw = j.requirements||j.description||"";
+    const sec = j.summary_sections||parseJobSummary(raw);
+    const has = k => sec[k]&&((sec[k].he||[]).length||(sec[k].en||[]).length);
+    const mains = DEFAULT_SECTION_ORDER.filter(k=>k!=="additional"&&has(k))
+      .map(k=>sectionBox(sectionDisplayLabel(k,"he"),sec[k])).join("");
+    const addl   = has("additional")?sectionBox(sectionDisplayLabel("additional","he"),sec.additional):"";
+    const reason = j.fit_reason  ? textBox("✦ למה זה מתאים למורן",j.fit_reason,"box-reason") : "";
+    const ai     = j.ai_fit_reason
+      ? textBox(`✦ Gemini — ${j.ai_fit_category||"review"} (${j.ai_fit_confidence||0}%)`,j.ai_fit_reason,"box-ai","ltr") : "";
+    const raw2   = !mains&&!addl&&raw ? textBox("פירוט שנמצא",raw,"","ltr") : "";
+    const miss   = !mains&&!addl&&!raw ? textBox("פירוט המשרה","לא הצלחתי למשוך פירוט מלא. פתחי את עמוד המשרה.") : "";
+    const terms  = j.matched_terms ? textBox("מילות התאמה",j.matched_terms) : "";
+    return `<div class="details-grid">${reason}${ai}${mains}${raw2}${terms}${addl}${miss}</div>`;
   }
 
   /* ── SVG chevron ────────────────────────────────────────────────────────── */
   const CHEV = `<div class="chev-box"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></div>`;
 
-  /* ── Render a single job row (inside cluster) ───────────────────────────── */
+  /* ── Render job row ─────────────────────────────────────────────────────── */
   function renderJobRow(j) {
     const isApplied = !!applied[j.link];
-    const safeLink  = esc(j.link);
-
-    const newB   = j.is_new    ? `<span class="badge badge-new">חדש</span>` : "";
-    const hotB   = j.is_hot    ? `<span class="badge badge-hot" title="${esc(j.hot_terms)}">🔥 לוהטת</span>` : "";
-    const aiB    = j.ai_fit_category ? `<span class="badge badge-ai">${esc(j.ai_fit_confidence||0)}%</span>` : "";
-    const liveB  = j.alive_status === "alive"
+    const sl = esc(j.link);
+    const newB  = j.is_new ? `<span class="badge badge-new">חדש</span>` : "";
+    const hotB  = j.is_hot ? `<span class="badge badge-hot" title="${esc(j.hot_terms)}">🔥 לוהטת</span>` : "";
+    const aiB   = j.ai_fit_category ? `<span class="badge badge-ai">${esc(j.ai_fit_confidence||0)}%</span>` : "";
+    const liveB = j.alive_status==="alive"
       ? `<span class="badge badge-alive">פעילה</span>`
       : `<span class="badge badge-unknown">לא ודאי</span>`;
-    const clickB = clicked[j.link] ? `<span class="badge badge-clicked">נלחץ</span>` : "";
-    const appB   = isApplied ? `<span class="badge badge-applied">✓ הוגש ${fmtDate(applied[j.link])}</span>` : "";
-
+    const clkB  = clicked[j.link] ? `<span class="badge badge-clicked">נלחץ</span>` : "";
+    const appB  = isApplied ? `<span class="badge badge-applied">✓ הוגש ${fmtDate(applied[j.link])}</span>` : "";
     const applyBtn = isApplied
-      ? `<button class="btn btn-ghost" data-unapply="${safeLink}">ביטול הגשה</button>`
-      : `<button class="btn btn-success" data-apply="${safeLink}">הגשתי ✓</button>`;
-    const appliedNote = isApplied ? `<span class="applied-note">הוגש ${fmtDate(applied[j.link])}</span>` : "";
+      ? `<button class="btn btn-ghost" data-unapply="${sl}">ביטול הגשה</button>`
+      : `<button class="btn btn-success" data-apply="${sl}">הגשתי ✓</button>`;
+    const appNote = isApplied ? `<span class="applied-note">הוגש ${fmtDate(applied[j.link])}</span>` : "";
 
     return `
-      <div class="job-row${j.is_hot ? " hot-row" : ""}" role="listitem">
-        <div class="job-row-head" data-toggle="${safeLink}" tabindex="0" role="button"
+      <div class="job-row${j.is_hot?" hot-row":""}" role="listitem">
+        <div class="job-row-head" data-toggle="${sl}" tabindex="0" role="button"
              aria-expanded="false" aria-label="${esc(j.title)}">
           ${CHEV}
           <div class="job-row-info">
             <div class="job-row-title">${esc(j.title)}</div>
             <div class="job-row-meta">${esc(j.location)}<span class="dot">·</span>${esc(j.source)}</div>
           </div>
-          <div class="job-row-badges">${newB}${hotB}${aiB}${clickB}${appB}${liveB}</div>
+          <div class="job-row-badges">${newB}${hotB}${aiB}${clkB}${appB}${liveB}</div>
         </div>
         <div class="job-row-body">
-          ${renderJobDetails(j)}
+          ${renderDetails(j)}
           <div class="card-actions">
-            <a class="btn btn-primary" href="${safeLink}" target="_blank" rel="noreferrer"
-               data-open="${safeLink}">פתיחת המשרה ↗</a>
-            ${applyBtn}${appliedNote}
+            <a class="btn btn-primary" href="${sl}" target="_blank" rel="noreferrer"
+               data-open="${sl}">פתיחת המשרה ↗</a>
+            ${applyBtn}${appNote}
           </div>
         </div>
       </div>`;
   }
 
-  /* ── Render one company cluster ─────────────────────────────────────────── */
+  /* ── Render cluster ─────────────────────────────────────────────────────── */
   function renderCluster(company, jobs) {
-    const hasCenter = jobs.some(j => isCenter(j.location));
-    const fitCnt    = jobs.filter(j => (j.fit_category || "fit") === "fit").length;
-    const hotCnt    = jobs.filter(j => j.is_hot).length;
-    const newCnt    = jobs.filter(j => j.is_new).length;
-    const hasHot    = hotCnt > 0;
-    const isOpen    = openCompanies.has(company) || jobs.length === 1;
-
-    const locs = [...new Set(jobs.map(j => j.location).filter(Boolean))].slice(0, 3).join(" · ");
-
-    const ctrB  = hasCenter ? `<span class="badge badge-center">📍 מרכז</span>` : "";
-    const cntB  = `<span class="badge badge-count">${jobs.length} משרות</span>`;
-    const fitB  = fitCnt  ? `<span class="badge badge-fit">✦ ${fitCnt} מתאימות</span>` : "";
-    const hotB  = hotCnt  ? `<span class="badge badge-hot">🔥 ${hotCnt}</span>` : "";
-    const newB  = newCnt  ? `<span class="badge badge-new">${newCnt} חדש</span>` : "";
-
-    const jobsHtml = jobs.map(j => renderJobRow(j)).join("");
-
+    const hasCtr = jobs.some(j=>isCenter(j.location));
+    const hasHot = jobs.some(j=>j.is_hot);
+    const fitCnt = jobs.filter(j=>(j.fit_category||"fit")==="fit").length;
+    const hotCnt = jobs.filter(j=>j.is_hot).length;
+    const newCnt = jobs.filter(j=>j.is_new).length;
+    const isOpen = openCompanies.has(company) || jobs.length===1;
+    const locs   = [...new Set(jobs.map(j=>j.location).filter(Boolean))].slice(0,3).join(" · ");
+    const ctrB   = hasCtr ? `<span class="badge badge-center">📍 מרכז</span>` : "";
+    const cntB   = `<span class="badge badge-count">${jobs.length} משרות</span>`;
+    const fitB   = fitCnt ? `<span class="badge badge-fit">✦ ${fitCnt} מתאימות</span>` : "";
+    const hotB   = hotCnt ? `<span class="badge badge-hot">🔥 ${hotCnt}</span>` : "";
+    const newB   = newCnt ? `<span class="badge badge-new">${newCnt}</span>` : "";
     return `
-      <div class="cluster${hasHot ? " has-hot" : ""}${isOpen ? " open" : ""}" role="listitem">
+      <div class="cluster${hasHot?" has-hot":""}${isOpen?" open":""}" role="listitem">
         <div class="cluster-head" data-company="${esc(company)}" tabindex="0" role="button"
              aria-expanded="${isOpen}" aria-label="${esc(company)}, ${jobs.length} משרות">
           ${CHEV}
@@ -807,170 +679,146 @@
           </div>
           <div class="cluster-badges">${ctrB}${cntB}${fitB}${hotB}${newB}</div>
         </div>
-        <div class="cluster-jobs">${jobsHtml}</div>
+        <div class="cluster-jobs">${jobs.map(renderJobRow).join("")}</div>
       </div>`;
   }
 
-  /* ── Main render ────────────────────────────────────────────────────────── */
+  /* ── Filter ─────────────────────────────────────────────────────────────── */
   function visibleJobs() {
-    if (filter === "applied") return allJobs.filter(j => applied[j.link]);
-    let jobs = allJobs.filter(j => !applied[j.link]);
-    if      (filter === "fit")     jobs = jobs.filter(j => (j.fit_category || "fit") === "fit");
-    else if (filter === "review")  jobs = jobs.filter(j => j.fit_category === "review");
-    else if (filter === "new")     jobs = jobs.filter(j => j.is_new);
-    else if (filter === "hot")     jobs = jobs.filter(j => j.is_hot);
-    else if (filter === "ai")      jobs = jobs.filter(j => j.ai_fit_category === "fit" || j.ai_fit_category === "review");
-    else if (filter === "alive")   jobs = jobs.filter(j => j.alive_status === "alive");
-    else if (filter === "clicked") jobs = jobs.filter(j => clicked[j.link]);
-    return jobs;
+    if (filter==="applied") return allJobs.filter(j=>applied[j.link]);
+    let j = allJobs.filter(j=>!applied[j.link]);
+    if      (filter==="fit")     j=j.filter(j=>(j.fit_category||"fit")==="fit");
+    else if (filter==="review")  j=j.filter(j=>j.fit_category==="review");
+    else if (filter==="new")     j=j.filter(j=>j.is_new);
+    else if (filter==="hot")     j=j.filter(j=>j.is_hot);
+    else if (filter==="ai")      j=j.filter(j=>j.ai_fit_category==="fit"||j.ai_fit_category==="review");
+    else if (filter==="alive")   j=j.filter(j=>j.alive_status==="alive");
+    else if (filter==="clicked") j=j.filter(j=>clicked[j.link]);
+    return j;
   }
 
+  /* ── Render all ─────────────────────────────────────────────────────────── */
   function render() {
     const list   = document.getElementById("list");
-    const active = allJobs.filter(j => !applied[j.link]);
-
-    document.getElementById("s-total").textContent   = active.filter(j => (j.fit_category || "fit") === "fit").length;
-    document.getElementById("s-review").textContent  = active.filter(j => j.fit_category === "review").length;
-    document.getElementById("s-new").textContent     = active.filter(j => j.is_new).length;
-    document.getElementById("s-hot").textContent     = active.filter(j => j.is_hot).length;
+    const active = allJobs.filter(j=>!applied[j.link]);
+    document.getElementById("s-total").textContent   = active.filter(j=>(j.fit_category||"fit")==="fit").length;
+    document.getElementById("s-review").textContent  = active.filter(j=>j.fit_category==="review").length;
+    document.getElementById("s-new").textContent     = active.filter(j=>j.is_new).length;
+    document.getElementById("s-hot").textContent     = active.filter(j=>j.is_hot).length;
     document.getElementById("s-clicked").textContent = Object.keys(clicked).length;
     document.getElementById("s-applied").textContent = Object.keys(applied).length;
 
     const jobs = visibleJobs();
     if (!jobs.length) {
       list.innerHTML = `<div class="empty-state">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-        <p>אין משרות להצגה בכרטיסייה הזו.</p>
-      </div>`;
+        </svg><p>אין משרות להצגה בכרטיסייה הזו.</p></div>`;
       return;
     }
 
     const groups = groupAndSort(jobs);
-
-    // Separate center vs rest for the divider
-    const centerGroups = groups.filter(([, grp]) => grp.some(j => isCenter(j.location)));
-    const otherGroups  = groups.filter(([, grp]) => !grp.some(j => isCenter(j.location)));
+    const ctrG = groups.filter(([,g])=>g.some(j=>isCenter(j.location)));
+    const othG = groups.filter(([,g])=>!g.some(j=>isCenter(j.location)));
 
     let html = "";
-    if (centerGroups.length) {
-      html += `<div class="region-divider">📍 מרכז הארץ</div>`;
-      html += centerGroups.map(([co, grp]) => renderCluster(co, grp)).join("");
-    }
-    if (otherGroups.length) {
-      html += `<div class="region-divider">🗺 שאר הארץ</div>`;
-      html += otherGroups.map(([co, grp]) => renderCluster(co, grp)).join("");
-    }
-
+    if (ctrG.length) { html += `<div class="region-divider">📍 מרכז הארץ</div>`; html += ctrG.map(([co,g])=>renderCluster(co,g)).join(""); }
+    if (othG.length) { html += `<div class="region-divider">🗺 שאר הארץ</div>`;   html += othG.map(([co,g])=>renderCluster(co,g)).join(""); }
     list.innerHTML = html;
 
-    /* ── Cluster toggle ──────────────────────────────────────────────────── */
+    /* cluster toggle */
     list.querySelectorAll(".cluster-head").forEach(el => {
-      const toggle = () => {
-        const cluster = el.closest(".cluster");
-        const co = el.dataset.company;
-        cluster.classList.toggle("open");
-        const isOpen = cluster.classList.contains("open");
-        el.setAttribute("aria-expanded", isOpen);
-        isOpen ? openCompanies.add(co) : openCompanies.delete(co);
+      const t = () => {
+        const cl = el.closest(".cluster"), co = el.dataset.company;
+        cl.classList.toggle("open");
+        const open = cl.classList.contains("open");
+        el.setAttribute("aria-expanded", open);
+        open ? openCompanies.add(co) : openCompanies.delete(co);
       };
-      el.addEventListener("click", toggle);
-      el.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
+      el.addEventListener("click", t);
+      el.addEventListener("keydown", e => { if (e.key==="Enter"||e.key===" ") { e.preventDefault(); t(); } });
     });
 
-    /* ── Job row toggle ──────────────────────────────────────────────────── */
+    /* job row toggle */
     list.querySelectorAll("[data-toggle]").forEach(el => {
-      const toggle = () => {
+      const t = () => {
         const row = el.closest(".job-row");
         row.classList.toggle("open");
         el.setAttribute("aria-expanded", row.classList.contains("open"));
-        const job = jobMap.get(el.dataset.toggle);
-        if (job) markClicked(job, false);
+        const j = jobMap.get(el.dataset.toggle);
+        if (j) markClicked(j, false);
       };
-      el.addEventListener("click", toggle);
-      el.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
+      el.addEventListener("click", t);
+      el.addEventListener("keydown", e => { if (e.key==="Enter"||e.key===" ") { e.preventDefault(); t(); } });
     });
 
     list.querySelectorAll("[data-apply]").forEach(el =>
-      el.addEventListener("click", e => { e.stopPropagation(); const j = jobMap.get(el.dataset.apply); if (j) apply(j); }));
+      el.addEventListener("click", e => { e.stopPropagation(); const j=jobMap.get(el.dataset.apply); if(j) apply(j); }));
     list.querySelectorAll("[data-unapply]").forEach(el =>
       el.addEventListener("click", e => { e.stopPropagation(); unapply(el.dataset.unapply); }));
     list.querySelectorAll("[data-open]").forEach(el =>
-      el.addEventListener("click", e => { e.stopPropagation(); const j = jobMap.get(el.dataset.open); if (j) markClicked(j); }));
+      el.addEventListener("click", e => { e.stopPropagation(); const j=jobMap.get(el.dataset.open); if(j) markClicked(j); }));
   }
 
   /* ── Data ops ───────────────────────────────────────────────────────────── */
   async function loadJobs() {
     try {
-      const snap = await get(ref(db, "jobs"));
-      if (snap.exists()) {
-        const v = snap.val();
-        return Array.isArray(v) ? v.filter(Boolean) : Object.values(v);
-      }
-    } catch (e) { console.warn("RTDB jobs read failed, using jobs.json", e); }
-    const r = await fetch("jobs.json?ts=" + Date.now());
-    return (await r.json()).jobs || [];
+      const snap = await get(ref(db,"jobs"));
+      if (snap.exists()) { const v=snap.val(); return Array.isArray(v)?v.filter(Boolean):Object.values(v); }
+    } catch(e) { console.warn("RTDB failed, using jobs.json",e); }
+    return ((await (await fetch("jobs.json?ts="+Date.now())).json()).jobs)||[];
   }
   async function loadApplied() {
-    applied = {};
-    try {
-      const snap = await get(ref(db, "applied"));
-      if (snap.exists()) Object.values(snap.val()).forEach(x => { if (x?.link) applied[x.link] = x.appliedAt; });
-    } catch (e) { console.warn("RTDB applied read failed", e); }
+    applied={};
+    try { const s=await get(ref(db,"applied")); if(s.exists()) Object.values(s.val()).forEach(x=>{if(x?.link) applied[x.link]=x.appliedAt;}); }
+    catch(e) { console.warn(e); }
   }
   async function loadClicked() {
-    clicked = {};
-    try {
-      const snap = await get(ref(db, "clicked"));
-      if (snap.exists()) Object.values(snap.val()).forEach(x => { if (x?.link) clicked[x.link] = x.clickedAt; });
-    } catch (e) { console.warn("RTDB clicked read failed", e); }
+    clicked={};
+    try { const s=await get(ref(db,"clicked")); if(s.exists()) Object.values(s.val()).forEach(x=>{if(x?.link) clicked[x.link]=x.clickedAt;}); }
+    catch(e) { console.warn(e); }
   }
-
-  async function markClicked(job, rerender = true) {
-    const at = new Date().toISOString();
-    const wasClicked = !!clicked[job.link];
-    clicked[job.link] = at;
-    if (rerender) render();
-    else if (!wasClicked) document.getElementById("s-clicked").textContent = Object.keys(clicked).length;
-    try { await set(ref(db, "clicked/" + jobId(job.link)), { link: job.link, title: job.title, company: job.company, clickedAt: at }); }
-    catch (e) { console.warn("שמירת נלחץ נכשלה", e); }
+  async function markClicked(job, rerender=true) {
+    const at=new Date().toISOString(), was=!!clicked[job.link];
+    clicked[job.link]=at;
+    if(rerender) render();
+    else if(!was) document.getElementById("s-clicked").textContent=Object.keys(clicked).length;
+    try { await set(ref(db,"clicked/"+jobId(job.link)),{link:job.link,title:job.title,company:job.company,clickedAt:at}); } catch(e){}
   }
   async function apply(job) {
-    const at = new Date().toISOString();
-    applied[job.link] = at; render();
-    try { await set(ref(db, "applied/" + jobId(job.link)), { link: job.link, title: job.title, company: job.company, appliedAt: at }); }
-    catch (e) { alert("שמירת ההגשה נכשלה."); console.error(e); }
+    const at=new Date().toISOString();
+    applied[job.link]=at; render();
+    try { await set(ref(db,"applied/"+jobId(job.link)),{link:job.link,title:job.title,company:job.company,appliedAt:at}); }
+    catch(e) { alert("שמירת ההגשה נכשלה."); console.error(e); }
   }
   async function unapply(link) {
     delete applied[link]; render();
-    try { await remove(ref(db, "applied/" + jobId(link))); } catch (e) { console.error(e); }
+    try { await remove(ref(db,"applied/"+jobId(link))); } catch(e){}
   }
 
   /* ── Filter buttons ─────────────────────────────────────────────────────── */
   document.querySelectorAll(".filter-btn").forEach(btn =>
     btn.addEventListener("click", () => {
-      document.querySelectorAll(".filter-btn").forEach(b => { b.classList.remove("active"); b.setAttribute("aria-selected","false"); });
+      document.querySelectorAll(".filter-btn").forEach(b=>{b.classList.remove("active");b.setAttribute("aria-selected","false");});
       btn.classList.add("active"); btn.setAttribute("aria-selected","true");
-      filter = btn.dataset.f; render();
+      filter=btn.dataset.f; render();
     }));
 
   /* ── Boot ───────────────────────────────────────────────────────────────── */
   async function loadAll() {
-    const [jobs] = await Promise.all([loadJobs(), loadApplied(), loadClicked()]);
-    allJobs = jobs || [];
-    jobMap  = new Map(allJobs.map(j => [j.link, j]));
+    const [jobs] = await Promise.all([loadJobs(),loadApplied(),loadClicked()]);
+    allJobs = jobs||[];
+    jobMap  = new Map(allJobs.map(j=>[j.link,j]));
     try {
-      const meta = await get(ref(db, "meta"));
-      if (meta.exists() && meta.val().generated_at)
+      const meta = await get(ref(db,"meta"));
+      if(meta.exists()&&meta.val().generated_at)
         document.getElementById("updated").textContent =
-          "עודכן לאחרונה: " + new Date(meta.val().generated_at).toLocaleString("he-IL");
-    } catch (e) {}
+          "עודכן לאחרונה: "+new Date(meta.val().generated_at).toLocaleString("he-IL");
+    } catch(_) {}
     render();
   }
   loadAll().catch(err => {
-    document.getElementById("list").innerHTML =
-      `<div class="empty-state"><p>שגיאה בטעינת הנתונים. רענן את הדף.</p></div>`;
+    document.getElementById("list").innerHTML=`<div class="empty-state"><p>שגיאה בטעינת הנתונים. רענן את הדף.</p></div>`;
     console.error(err);
   });
 </script>
